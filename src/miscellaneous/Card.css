@@ -1,0 +1,63 @@
+.team-container {
+    display: inline-flex;
+    column-gap: 1cm;
+    padding: 50px 50px;
+    justify-content: center;
+    border: #000 solid 4px;
+}
+
+.card {
+    height: 400px;
+    width: 300px;
+    border: 1px solid hsl(352, 60%, 55%);
+    border-radius: 10px;
+    box-shadow: 3px 3px 1px rgba(93, 92, 92, 0.301);
+    padding: 5px 5px;
+    margin: 0px;
+    text-align: center;
+    transition: transform 0.5s, background 0.5s;
+}
+
+/* Hover effect: scale up by 0.5 and change background to grey */
+.card:hover {
+    transform: scale(1.2);
+    background: #e0e0e0;
+    cursor: pointer;
+
+    /* transition already set above for smooth effect */
+}
+
+.card img {
+    width: 200px;
+    height: 200px;
+    border-radius: 10px;
+    /*box-shadow: 3px 3px 1px rgba(93, 92, 92, 0.301);*/
+}
+
+.card-name {
+    font-size: 27px;
+    margin: 2px;
+    color: #AB3636;
+
+}
+
+.card-title {
+    font-size: 20px;
+    font-style: italic;
+    margin: 2px;
+    color: #737375;
+}
+
+.card-paragraph {
+    font-size: 15px;
+    font-style: italic;
+    margin: 0;
+    color: #fff;
+    transition: color 0.5s, opacity 0.5s;
+    opacity: 1;
+}
+
+.card:hover .card-paragraph {
+    color: #555;
+    opacity: 0.8;
+}

@@ -1,0 +1,337 @@
+/* =============================================
+   LoginModal.css
+   Matches the RevReview dark/red brand aesthetic
+   ============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500&display=swap');
+
+
+.Modal-SignUp {
+  position: fixed;    
+  inset: 0;               
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  max-height: 100svh;
+  padding: 10px 0;
+  z-index: 2000;
+  box-sizing: border-box;
+}
+
+.modal-overlay {
+  overflow-y: auto;
+  max-height: 100svh;
+  display: flex;
+  align-items: flex-start;  /* prevents centering from cutting off top */
+  padding: 10px 0;
+}
+
+/* ---------- Backdrop ---------- */
+.lm-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-start;   
+  justify-content: center;
+  z-index: 2000;
+  padding: 1rem;
+  overflow-y: auto;          
+  animation: lm-fade-in 0.2s ease forwards;
+}
+@keyframes lm-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ---------- Card ---------- */
+.lm-card {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2rem 2rem 1.5rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.07), 0 20px 60px rgba(0,0,0,0.22);
+  animation: lm-slide-up 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  overflow: hidden;
+  margin: auto;              
+}
+
+/* Red accent bar on top */
+.lm-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #cc0000, #ff3333);
+}
+
+@keyframes lm-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ---------- Close button ---------- */
+.lm-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #f2f2f2;
+  color: #444;
+  font-size: 1.3rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, transform 0.15s;
+}
+
+.lm-close:hover {
+  background: #e0e0e0;
+  color: #111;
+  transform: scale(1.1);
+}
+
+/* ---------- Header ---------- */
+.lm-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.lm-icon-ring {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #fff0f0;
+  border: 2px solid #ffcccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #cc0000;
+  margin-bottom: 0.85rem;
+}
+
+.lm-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #111;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 0.3rem;
+}
+
+.lm-subtitle {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+}
+
+/* ---------- Error ---------- */
+.lm-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff3f3;
+  border: 1px solid #ffcccc;
+  border-left: 4px solid #cc0000;
+  color: #990000;
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.875rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 6px;
+  margin-bottom: 1.1rem;
+  animation: lm-fade-in 0.2s ease;
+}
+
+/* ---------- Social buttons ---------- */
+.lm-social {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lm-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 0.72rem 1rem;
+  border-radius: 8px;
+  border: 1.5px solid transparent;
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, filter 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+
+.lm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.lm-btn:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+}
+
+.lm-btn:not(:disabled):active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Google */
+.lm-btn--google {
+  background: #fff;
+  border-color: #dadce0;
+  color: #3c4043;
+}
+
+.lm-btn--google:not(:disabled):hover {
+  background: #f8f9fa;
+  border-color: #bbb;
+}
+
+/* Facebook */
+.lm-btn--facebook {
+  background: #1877f2;
+  border-color: #1877f2;
+  color: #fff;
+}
+
+.lm-btn--facebook:not(:disabled):hover {
+  background: #1565d8;
+  border-color: #1565d8;
+}
+
+/* Sign up */
+.lm-btn--signup {
+  background: #111;
+  border-color: #111;
+  color: #fff;
+}
+
+.lm-btn--signup:not(:disabled):hover {
+  background: #cc0000;
+  border-color: #cc0000;
+}
+
+.lm-btn-icon {
+  flex-shrink: 0;
+}
+
+/* ---------- Spinner ---------- */
+.lm-spinner,
+.lm-spinner--white {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  border-top-color: #555;
+  animation: lm-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+.lm-spinner--white {
+  border-color: rgba(255,255,255,0.25);
+  border-top-color: #fff;
+}
+
+@keyframes lm-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------- Divider ---------- */
+.lm-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 1.25rem 0 1rem;
+  color: #aaa;
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.lm-divider::before,
+.lm-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e8e8e8;
+}
+
+/* ---------- Sign-up section ---------- */
+.lm-signup-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1.25rem;
+}
+
+.lm-signup-text {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.88rem;
+  color: #666;
+  margin: 0;
+}
+
+/* ---------- Footer note ---------- */
+.lm-footer-note {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.78rem;
+  color: #aaa;
+  text-align: center;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.lm-footer-note a {
+  color: #cc0000;
+  text-decoration: none;
+}
+
+.lm-footer-note a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+  .lm-card {
+    padding: 1.5rem 1.25rem 1.25rem;
+    border-radius: 10px;
+  }
+
+  .lm-title {
+    font-size: 1.5rem;
+  }
+}

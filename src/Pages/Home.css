@@ -1,0 +1,56 @@
+/* ==========================
+   Statistics Section
+========================== */
+.App {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1940px;
+  margin: 0 auto;
+  gap: 2rem;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+/* ==========================
+   Tablet
+========================== */
+
+@media (max-width: 900px) {
+  .statistics-container {
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+
+  .stat-card {
+    flex: 0 0 calc(50% - 15px);
+  }
+
+  .stat-card:nth-child(2)::after {
+    display: none;
+  }
+}
+
+/* ==========================
+   Mobile
+========================== */
+
+@media (max-width: 600px) {
+  .statistics-container {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .stat-card {
+    width: 100%;
+    text-align: center;
+    padding: 0;
+  }
+
+  .stat-card::after {
+    display: none;
+  }
+
+  .stat-value {
+    font-size: 1.7rem;
+  }
+}

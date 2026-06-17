@@ -1,0 +1,71 @@
+.calculator-page {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.calculator-page h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.petrol-calculator {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.container {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.option,
+.tank-size,
+.distance {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.calculate {
+  background: #AB3636;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.calculate:hover {
+  background: #8b2c2c;
+}
+
+.answer {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2rem;
+}
+
+#answer {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+  color: #AB3636;
+}

@@ -1,0 +1,20 @@
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
+
+
+import Home from './Pages/Home.jsx'
+import CarStats from './Pages/CarStats.jsx'
+import RevCalculator from './Pages/RevCalculator.jsx'
+import Revdistance from './Pages/RevDistance.jsx'
+import Brands from './Pages/Brands.jsx'
+function Routes() {
+  return (
+    <Router>
+      <Switch>
+        <Route exact path="/App" element={<Home />} />
+        <Route path="/Brands" element={<Brands />} />
+        <Route path="/CarStats" element={<CarStats />} />
+      </Switch>
+    </Router>
+  );
+}
+export default Routes;

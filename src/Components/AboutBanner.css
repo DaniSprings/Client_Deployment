@@ -1,0 +1,149 @@
+/* ── Slide-in animation ───────────────────────────────────────── */
+@keyframes slideInFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.about-banner h1,
+.about-banner p,
+.story-banner h1,
+.story-banner p {
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    max-width: 800px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.about-banner-image,
+.story-banner-image {
+    width: 100%;
+    height: 260px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-top: #000 solid 4px;
+    border-left: #000 solid 4px;
+    border-right: #000 solid 4px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.about-banner-image{
+    background-image: url('../assets/erik-mclean-ZRns2R5azu0-unsplash.jpg');
+}
+
+.story-banner-image {
+    background-image: url('../assets/IMG-0882.jpg');
+}
+
+.about-banner-image:hover,
+.story-banner-image:hover{
+    transform: scale(1.1);
+}
+
+.about-banner,
+.story-banner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 36px 24px;
+    border-radius: 30px;
+    border-top: none; /* connects seamlessly with image block above */
+    background-color: #1a1a1a;
+}
+
+.story-banner{
+    margin: 2rem auto;
+}
+/* Animate h1 */
+.about-banner h1,
+.story-banner h1 {
+    font-style: italic;
+    animation: slideInFromBottom 0.6s ease-out 0.1s both;
+}
+
+/* Animate p — slight delay after h1 */
+.about-banner p,
+.story-banner p {
+    animation: slideInFromBottom 0.6s ease-out 0.35s both;
+}
+
+/* Tablet: taller image */
+@media (min-width: 480px) {
+    .about-banner-image,
+    .story-banner-image {
+        height: 340px;
+    }
+    
+}
+
+@media (min-width:360px){
+    .about-banner,
+    .story-banner {
+        background-color: linear-gradient(135deg, #002e5d 0%, #ab3636 100%);
+        width: 100%;
+    }
+}
+
+/* ── DESKTOP (≥ 900px — full bleed background image) ─────────── */
+@media (min-width: 900px) {
+    /* Hide the separate image block on desktop */
+    .about-banner-image,
+    .story-banner-image {
+        display: none;
+    }
+
+    .about-banner {
+        background-image: url('../assets/erik-mclean-ZRns2R5azu0-unsplash.jpg');
+        background-size: 100% auto;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 500px;
+        /*border: #000 solid 4px;*/
+        background-color: transparent;
+    }
+
+    .story-banner {
+        background-image: url('../assets/IMG-0882.jpg');
+        background-size: 100% auto;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 500px;
+        /*border: #000 solid 4px;*/
+        background-color: transparent;
+    }
+}
+
+@media (min-width: 900px) {
+    .about-banner,
+    .story-banner {
+        transition: background-size 0.5s ease-in-out;
+        cursor: pointer;
+    }
+
+    .about-banner:hover {
+        background-size: 110% auto;
+    }
+
+    .story-banner:hover {
+        background-size: 110% auto;
+    }
+}
+
+.Banner {
+    width: 100%;
+    overflow: hidden;
+}
+
+.story-image {
+    width: 100%;
+    height: auto;
+}
