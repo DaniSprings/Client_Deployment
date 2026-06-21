@@ -48,11 +48,11 @@ function CarStats() {
         { id: 1, brand: '', model: '' }
     ]);
 
-    const [brandsWithCount, setBrandsWithCount] = useState([]);
+    const [/*brandsWithCount*/, setBrandsWithCount] = useState([]);
     const [filteredBrands, setFilteredBrands] = useState({});
     const [modelsList, setModelsList] = useState({});
     const [showSuggestions, setShowSuggestions] = useState({});
-    const [loading, setLoading] = useState(true);
+    const [/*loading*/, setLoading] = useState(true);
     const [carDetailsData, setCarDetailsData] = useState({});
     const [carLookupStatus, setCarLookupStatus] = useState({});
     const [fetchingDetails, setFetchingDetails] = useState(false);
@@ -353,49 +353,9 @@ function CarStats() {
 
     return (
         <div className="carstat-main-container">
-            <h1>Car Statistics</h1>
+            <h1>Choose your Cars</h1>
 
             {/* Brands Display Section */}
-            <div className="brands-display-section">
-                <h2>Popular Car Brands</h2>
-                {loading ? (
-                    <div className="loading">Loading brands...</div>
-                ) : (
-                    <div className="brands-grid">
-                        {brandsWithCount.map((brand, index) => (
-                            <div
-                                key={index}
-                                className="brand-card"
-                                onClick={async () => {
-                                    // Pre-fill first empty car slot with this brand
-                                    const emptySlot = carStatsList.find(car => !car.brand);
-                                    if (emptySlot) {
-                                        setCarStatsList(prev =>
-                                            prev.map(car =>
-                                                car.id === emptySlot.id ? { ...car, brand: brand.name, model: '' } : car
-                                            )
-                                        );
-                                        await loadModelsForBrand(emptySlot.id, brand.name);
-                                    }
-                                }}
-                            >
-                                <img
-                                    src={brand.image}
-                                    alt={brand.name}
-                                    onError={(e) => {
-                                        e.target.style.display = 'none';
-                                    }}
-                                    className="brand-image"
-                                />
-                                <div className="brand-info">
-                                    <h3>{brand.name}</h3>
-                                    <p className="brand-count">{brand.count} models</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
 
             <form onSubmit={handleSubmit}>
                 <div className="carstat-row">
@@ -482,9 +442,7 @@ function CarStats() {
                                                 {showSuggestions[`${field.name}-${car.id}`] && filteredBrands[field.name === 'model' ? `model-${car.id}` : `brand-${car.id}`] && filteredBrands[field.name === 'model' ? `model-${car.id}` : `brand-${car.id}`].length > 0 && (
                                                     <div className="suggestions-dropdown">
                                                         {filteredBrands[field.name === 'model' ? `model-${car.id}` : `brand-${car.id}`].map((option, idx) => (
-                                                            <div
-                                                                key={idx}
-                                                                className="suggestion-item"
+                                                            <div key={idx} className="suggestion-item"
                                                                 onMouseDown={(event) => {
                                                                     event.preventDefault();
                                                                     if (field.name === 'brand') {
@@ -506,11 +464,7 @@ function CarStats() {
                             })}
 
                             {carStatsList.length > 1 && (
-                                <button
-                                    type="button"
-                                    className="btn-remove"
-                                    onClick={() => handleRemoveCar(car.id)}
-                                >
+                                <button type="button" className="btn-remove" onClick={() => handleRemoveCar(car.id)} >
                                     Remove
                                 </button>
                             )}
@@ -543,7 +497,7 @@ function CarStats() {
             {/* Car Details Results Section */}
             {Object.keys(carDetailsData).length > 0 && (
                 <div className="car-details-results">
-                    <h2>Comparison Results</h2>
+                    <h2>Compared Results</h2>
                     <div className="comparison-grid">
                         {Object.entries(carDetailsData).map(([carId, details]) => (
                             <div key={carId} className="car-detail-card">
@@ -553,7 +507,7 @@ function CarStats() {
                                     <h4>Price</h4>
                                     <p className="price-value">
                                         {details.price && details.price > 0
-                                            ? `$${details.price.toLocaleString()}`
+                                            ? `R${details.price.toLocaleString()}`
                                             : 'N/A'}
                                     </p>
                                 </div>

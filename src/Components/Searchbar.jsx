@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import './SearchBar.css';
 
-const FALLBACK_BRAND_NAMES = [
+/*const FALLBACK_BRAND_NAMES = [
     'Alfa Romeo',
     'Ashok Leyland',
     'Aston Martin',
@@ -55,7 +55,7 @@ const FALLBACK_BRAND_NAMES = [
     'Toyota',
     'Volkswagen',
     'Volvo',
-];
+];*/
 
 function SearchBar({
     searchBoxRef,
@@ -63,8 +63,8 @@ function SearchBar({
     searchFormRef,
     searchInputRef,
     handleSearchSubmit,
-    brandCatalog = [],
-    brandCounts = {},
+    /*brandCatalog = [],
+    brandCounts = {},*/
     selectedBrand,
     clearSelectedBrand,
     searchTerm,
@@ -81,7 +81,7 @@ function SearchBar({
     /*openLoginModal,
     showLoginModal,*/
 }) {
-    const availableBrands = brandCatalog.length > 0 ? brandCatalog : FALLBACK_BRAND_NAMES;
+    /*const availableBrands = brandCatalog.length > 0 ? brandCatalog : FALLBACK_BRAND_NAMES;*/
 
     const normalizedSuggestions = searchSuggestions.map((suggestion) => {
         if (typeof suggestion === 'string') {
@@ -109,86 +109,68 @@ function SearchBar({
 
                     <form ref={searchFormRef} onSubmit={handleSearchSubmit} className="searchbar-form">
                         {selectedBrand && (
-                            <button
-                                className="searchbar-selected-brand"
-                                type="button"
-                                onClick={clearSelectedBrand}
-                                title="Clear brand"
-                            >
-                                <span className="searchbar-selected-brand-label">{selectedBrand}</span>
-                                <span className="searchbar-selected-brand-close" aria-hidden="true">x</span>
-                            </button>
-                        )}
-                        <div className="SearchBar">
+                                <button
+                                    className="searchbar-selected-brand"
+                                    type="button" onClick={clearSelectedBrand} title="Clear brand" >
+                                    <span className="searchbar-selected-brand-label">{selectedBrand}</span>
+                                    <span className="searchbar-selected-brand-close" aria-hidden="true">x</span>
+                                </button>
+                            )}
+                            <div className="SearchBar">
                             <input
                                 className="searchbar-input"
-                                type="text"
-                                ref={searchInputRef}
-                                list={selectedBrand ? undefined : 'searchbar-brand-options'}
-                                value={searchTerm}
-                                onChange={handleSearchChange}
-                                onFocus={handleSearchInputClick}
-                                onClick={handleSearchInputClick}
-                                onKeyDown={handleSearchKeyDown}
-                                placeholder={
-                                    selectedBrand
-                                        ? `Type a model for ${selectedBrand}`
-                                        : `Type a car brand${filter !== 'All' ? ` - ${filter}` : ''}`
-                                }
-                                aria-label="Search"
+        type="text"
+        ref={searchInputRef}
+        value={searchTerm}
+        onChange={handleSearchChange}
+        onFocus={handleSearchInputClick}
+        onClick={handleSearchInputClick}
+        onKeyDown={handleSearchKeyDown}
+        placeholder={
+            selectedBrand
+                ? `Type a model for ${selectedBrand}`
+                : `Type a car brand${filter !== 'All' ? ` - ${filter}` : ''}`
+        }
+        aria-label="Search"
                                 autoComplete={selectedBrand ? 'off' : 'on'}
                             />
-                            {!selectedBrand && availableBrands.length > 0 && (
-                                <datalist id="searchbar-brand-options">
-                                    {availableBrands.map((brand) => (
-                                        <option
-                                            key={brand}
-                                            value={brand}
-                                        >
-                                            {brandCounts[brand] ? `${brandCounts[brand]} models` : brand}
-                                        </option>
-                                    ))}
-                                </datalist>
-                            )}
-                            {/* SEARCH-BAR INPUT */}
-                            <button className="searchbar-submit-button" type="submit" aria-label="Search" >
+                                <button className="searchbar-submit-button" type="submit" aria-label="Search">
+                                    <svg className="Search_Icon searchbar-submit-icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                        <path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" />
+                                    </svg>
+                                </button>
 
-                                <svg className="Search_Icon searchbar-submit-icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                                    <path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" />
-                                </svg>
-                            </button>
-                        </div>
-
-                        {showSuggestions && (searchSuggestions.length > 0 || isLoadingSuggestions) && (
-                            <div className="searchbar-suggestions">
+                                {showSuggestions && (searchSuggestions.length > 0 || isLoadingSuggestions) && (
+                                <div className="searchbar-suggestions">
                                 {isLoadingSuggestions && (
                                     <div className="searchbar-suggestions-loading">
-                                        Loading {selectedBrand ? 'models' : 'brands'}...
+                                            Loading {selectedBrand ? 'models' : 'brands'}...
                                     </div>
+                                    )}
+                                    {normalizedSuggestions.map((suggestion, idx) => (
+                                        <button
+                                            key={idx}
+                                            type="button"
+                                            onClick={() => handleSuggestionSelect(suggestion)}
+                                            className={`searchbar-suggestion${activeSuggestionIndex === idx ? ' is-active' : ''}`}
+                                        >
+                                            <div className="searchbar-suggestion-row">
+                                                <div className="searchbar-suggestion-value">{suggestion.label}</div>
+                                                {!selectedBrand && Number.isFinite(suggestion.count) && (
+                                                    <div className="searchbar-suggestion-count">{suggestion.count}</div>
+                                                )}
+                                            </div>
+                                            <div className="searchbar-suggestion-meta-row">
+                                                <div className="searchbar-suggestion-type">{suggestion.metaLabel}</div>
+                                                {!selectedBrand && <div className="searchbar-suggestion-chevron">&gt;</div>}
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
                                 )}
-                                {normalizedSuggestions.map((suggestion, idx) => (
-                                    <button
-                                        key={idx}
-                                        type="button"
-                                        onClick={() => handleSuggestionSelect(suggestion)}
-                                        className={`searchbar-suggestion${activeSuggestionIndex === idx ? ' is-active' : ''}`}
-                                    >
-                                        <div className="searchbar-suggestion-row">
-                                            <div className="searchbar-suggestion-value">{suggestion.label}</div>
-                                            {!selectedBrand && Number.isFinite(suggestion.count) && (
-                                                <div className="searchbar-suggestion-count">{suggestion.count}</div>
-                                            )}
-                                        </div>
-                                        <div className="searchbar-suggestion-meta-row">
-                                            <div className="searchbar-suggestion-type">{suggestion.metaLabel}</div>
-                                            {!selectedBrand && <div className="searchbar-suggestion-chevron">&gt;</div>}
-                                        </div>
-                                    </button>
-                                ))}
                             </div>
-                        )}
-                    </form>
+                        </form>
 
                     {filterOpen && (
                         <div

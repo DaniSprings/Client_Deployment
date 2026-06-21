@@ -4,6 +4,33 @@ export const API_BASE = (
   import.meta.env.VITE_API_URL || "http://localhost:4000"
 ).replace(/\/$/, "");
 
+const FALLBACK_API_BASE = "http://localhost:4000";
+const isFallbackEnabled = API_BASE !== FALLBACK_API_BASE;
+
+const isPrimaryUnreachable = (error) => {
+  if (!error) {
+    return false;
+  }
+
+  // Axios network failures usually have no HTTP response.
+  if (error.response) {
+    return false;
+  }
+
+  const networkCodes = [
+    "ERR_NETWORK",
+    "ECONNREFUSED",
+    "ENOTFOUND",
+    "ETIMEDOUT",
+    "ECONNABORTED",
+  ];
+
+  return (
+    networkCodes.includes(error.code) ||
+    /network|failed to fetch|timeout|refused/i.test(error.message || "")
+  );
+};
+
 // Cache configuration
 const cache = new Map();
 let CACHE_DURATION = 5 * 60 * 1000; // 5 minutes default
@@ -44,8 +71,25 @@ api.interceptors.response.use(
     console.log(`[API Response] ${response.status} ${response.config.url}`);
     return response;
   },
-  (error) => {
+  async (error) => {
     const { config, response } = error;
+
+    if (
+      isFallbackEnabled &&
+      config &&
+      !config.__fallbackAttempted &&
+      isPrimaryUnreachable(error)
+    ) {
+      console.warn(
+        `[API Fallback] Primary API unreachable (${API_BASE}). Retrying ${config.method?.toUpperCase()} ${config.url} via ${FALLBACK_API_BASE}`,
+      );
+
+      return api.request({
+        ...config,
+        baseURL: FALLBACK_API_BASE,
+        __fallbackAttempted: true,
+      });
+    }
 
     // Handle 401 Unauthorized - Clear auth and redirect
     if (response?.status === 401) {

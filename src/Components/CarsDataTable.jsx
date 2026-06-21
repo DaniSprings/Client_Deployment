@@ -2,12 +2,99 @@ import PropTypes from 'prop-types';
 
 const EMPTY_FIELD = <span className="empty-field">-</span>;
 
+{/* Utility functions to format specific fields */}
 const formatPrice = (price) => {
     if (!price || price <= 0) {
         return 'N/A';
     }
 
-    return `$${price.toLocaleString()}`;
+    return `R${price.toLocaleString()}`;
+};
+
+const formatPower = (power) => {
+    if (power === null || power === undefined || power === '') {
+        return 'N/A';
+    }
+
+    if (power === 'TBA') {
+        return 'TBA';
+    }
+
+    return `${power} kW`;
+};
+
+const formatTorque = (torque) => {
+    if (torque === null || torque === undefined || torque === '') {
+        return 'N/A';
+    }
+
+    if (torque === 'TBA') {
+        return 'TBA';
+    }
+    return `${torque} Nm`;
+};
+const formatTopSpeed = (speed) => {
+    if (speed === null || speed === undefined || speed === '') {
+        return 'N/A';
+    }
+
+    if (speed === 'TBA') {
+        return 'TBA';
+    }
+
+    return `${speed} km/h`;
+};
+
+const formatAcceleration = (acceleration) => {
+    if (acceleration === null || acceleration === undefined || acceleration === '') {
+        return 'N/A';
+    }
+
+    if (acceleration === 'TBA') {
+        return 'TBA';
+    }
+
+    return `${acceleration} s`;
+};
+
+const formatFuelConsumption = (consumption) => {
+    if (consumption === null || consumption === undefined || consumption === '') {
+        return 'N/A';
+    }
+    if (consumption === 'TBA') {
+        return 'TBA';
+    }
+    return `${consumption} L/100km`;
+};
+
+const formatFuelRange = (range) => {
+    if (range === null || range === undefined || range === '') {
+        return 'N/A';
+    }
+    if (range === 'TBA') {
+        return 'TBA';
+    }
+    return `${range} km`;
+};
+
+const formatWidth = (dimension) => {
+    if (dimension === null || dimension === undefined || dimension === '') {
+        return 'N/A';
+    }
+    if (dimension === 'TBA') {
+        return 'TBA';
+    }
+    return `${dimension} mm`;
+};
+
+const formatLength = (dimension) => {
+    if (dimension === null || dimension === undefined || dimension === '') {
+        return 'N/A';
+    }
+    if (dimension === 'TBA') {
+        return 'TBA';
+    }
+    return `${dimension} mm`;
 };
 
 const renderStatus = (car, lookupState, hasDetails) => {
@@ -41,7 +128,7 @@ function CarsDataTable({ cars, carDetailsData, carLookupStatus }) {
 
     return (
         <div className="cars-data-table-section">
-            <h2>Current Selections & Data</h2>
+            <h2>Compared Data</h2>
             <div className="table-wrapper">
                 <table className="cars-data-table">
                     <thead>
@@ -58,8 +145,8 @@ function CarsDataTable({ cars, carDetailsData, carLookupStatus }) {
                             <th>0-60 km/h</th>
                             <th>Fuel Consumption</th>
                             <th>Fuel Range</th>
-                            <th>width_excl_mirrors_incl_mirrors</th>
-                            <th>length</th>
+                            <th>Width (excl. mirrors / incl. mirrors)</th>
+                            <th>Length</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -71,21 +158,21 @@ function CarsDataTable({ cars, carDetailsData, carLookupStatus }) {
                             if (details) {
                                 return (
                                     <tr key={car.id} className="complete">
-                                        <td>{index + 1}</td>
-                                        <td>{details.brand}</td>
-                                        <td>{details.model}</td>
-                                        <td><span className="price-cell">{formatPrice(details.price)}</span></td>
-                                        <td>{details.engine || 'N/A'}</td>
-                                        <td>{details.cylinders || 'N/A'}</td>
-                                        <td>{details.power || 'N/A'}</td>
-                                        <td>{details.torque || 'N/A'}</td>
-                                        <td>{details.topSpeed || 'N/A'}</td>
-                                        <td>{details.acceleration || 'N/A'}</td>
-                                        <td>{details.fuelConsumption || 'N/A'}</td>
-                                        <td>{details.fuelRange || 'N/A'}</td>
-                                        <td>{details.widthExclMirrorsInclMirrors || 'N/A'}</td>
-                                        <td>{details.length || 'N/A'}</td>
-                                        <td>
+                                        <td data-label="#">{index + 1}</td>
+                                        <td data-label="Brand">{details.brand}</td>
+                                        <td data-label="Model">{details.model}</td>
+                                        <td data-label="Price"><span className="price-cell">{formatPrice(details.price)}</span></td>
+                                        <td data-label="Engine">{details.engine || 'N/A'}</td>
+                                        <td data-label="Cylinders">{details.cylinders || 'N/A'}</td>
+                                        <td data-label="Power">{formatPower(details.power)}</td>
+                                        <td data-label="Torque">{formatTorque(details.torque)}</td>
+                                        <td data-label="Top Speed">{formatTopSpeed(details.topSpeed)}</td>
+                                        <td data-label="0-60 km/h">{formatAcceleration(details.acceleration)}</td>
+                                        <td data-label="Fuel Consumption">{formatFuelConsumption(details.fuelConsumption)}</td>
+                                        <td data-label="Fuel Range">{formatFuelRange(details.fuelRange)}</td>
+                                        <td data-label="Width">{formatWidth(details.widthExclMirrorsInclMirrors)}</td>
+                                        <td data-label="Length">{formatLength(details.length)}</td>
+                                        <td data-label="Status">
                                             {renderStatus(car, lookupState, true)}
                                             {lookupState?.message && <div>{lookupState.message}</div>}
                                         </td>
@@ -95,21 +182,21 @@ function CarsDataTable({ cars, carDetailsData, carLookupStatus }) {
 
                             return (
                                 <tr key={car.id} className="incomplete">
-                                    <td>{index + 1}</td>
-                                    <td>{car.brand || EMPTY_FIELD}</td>
-                                    <td>{car.model || EMPTY_FIELD}</td>
-                                    <td>{EMPTY_FIELD}</td>
-                                    <td>{EMPTY_FIELD}</td>
-                                    <td>{EMPTY_FIELD}</td>
-                                    <td>{EMPTY_FIELD}</td>
-                                    <td>{EMPTY_FIELD}</td>
-                                    <td>{EMPTY_FIELD}</td>
-                                    <td>{EMPTY_FIELD}</td>
-                                    <td>{EMPTY_FIELD}</td>
-                                    <td>{EMPTY_FIELD}</td>
-                                    <td>{EMPTY_FIELD}</td>
-                                    <td>{EMPTY_FIELD}</td>
-                                    <td>
+                                    <td data-label="#">{index + 1}</td>
+                                    <td data-label="Brand">{car.brand || EMPTY_FIELD}</td>
+                                    <td data-label="Model">{car.model || EMPTY_FIELD}</td>
+                                    <td data-label="Price">{EMPTY_FIELD}</td>
+                                    <td data-label="Engine">{EMPTY_FIELD}</td>
+                                    <td data-label="Cylinders">{EMPTY_FIELD}</td>
+                                    <td data-label="Power">{EMPTY_FIELD}</td>
+                                    <td data-label="Torque">{EMPTY_FIELD}</td>
+                                    <td data-label="Top Speed">{EMPTY_FIELD}</td>
+                                    <td data-label="0-60 km/h">{EMPTY_FIELD}</td>
+                                    <td data-label="Fuel Consumption">{EMPTY_FIELD}</td>
+                                    <td data-label="Fuel Range">{EMPTY_FIELD}</td>
+                                    <td data-label="Width">{EMPTY_FIELD}</td>
+                                    <td data-label="Length">{EMPTY_FIELD}</td>
+                                    <td data-label="Status">
                                         {renderStatus(car, lookupState, false)}
                                         {lookupState?.message && <div>{lookupState.message}</div>}
                                     </td>

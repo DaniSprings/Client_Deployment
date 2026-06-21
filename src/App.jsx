@@ -31,7 +31,7 @@ function App() {
           <Route path="/RevCalculator" element={<RevCalculator />} />
           <Route path="/Revdistance" element={<Revdistance />} />
           <Route exact path="*" element={<NotFound />} />
-        </Routes>
+        </Routes>     
         <Analytics />
         <AdBanner />
         <Forms />

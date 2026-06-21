@@ -124,7 +124,7 @@
 }
 
 .searchbar-suggestions {
-    position: relative;
+    position: absolute;
     top: 100%;
     left: 0;
     right: 0;
@@ -137,6 +137,7 @@
     background: #f4f4f4;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
     z-index: 1300;
+    box-sizing: border-box;
 }
 
 .searchbar-suggestions-loading {
@@ -272,9 +273,17 @@
 @media (max-width: 768px) {
     .SearchBarContainer {
         padding: 0.5rem;
+        overflow: hidden;
     }
 
     .filter-container {
         width: 100%;
+    }
+
+    .searchbar-suggestions {
+        left: 0;
+        right: 0;
+        margin-top: 8px;
+        max-height: 280px;
     }
 }
