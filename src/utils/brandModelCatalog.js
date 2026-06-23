@@ -1,4 +1,4 @@
-import modelNameRows from "../JSON/Test Model Names.json";
+import modelNameRows from "../../JSON/Test Model Names.json";
 
 const brandAliases = {
   cherry: "chery",
