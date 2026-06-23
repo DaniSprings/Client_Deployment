@@ -19,6 +19,7 @@ function Forms(){
       <input
         type="email"
         className="form-input"
+        id='EmailSend'
         placeholder="engineer@industry.com"
       />
 

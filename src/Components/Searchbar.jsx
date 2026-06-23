@@ -118,21 +118,18 @@ function SearchBar({
                             )}
                             <div className="SearchBar">
                             <input
-                                className="searchbar-input"
-        type="text"
-        ref={searchInputRef}
-        value={searchTerm}
-        onChange={handleSearchChange}
-        onFocus={handleSearchInputClick}
-        onClick={handleSearchInputClick}
-        onKeyDown={handleSearchKeyDown}
-        placeholder={
-            selectedBrand
-                ? `Type a model for ${selectedBrand}`
-                : `Type a car brand${filter !== 'All' ? ` - ${filter}` : ''}`
-        }
-        aria-label="Search"
-                                autoComplete={selectedBrand ? 'off' : 'on'}
+                                    className="searchbar-input"
+                                    type="text"
+                                    id='SearchValue'
+                                    ref={searchInputRef}
+                                    value={searchTerm}
+                                    onChange={handleSearchChange}
+                                    onFocus={handleSearchInputClick}
+                                    onClick={handleSearchInputClick}
+                                    onKeyDown={handleSearchKeyDown}
+                                    placeholder={  selectedBrand ? `Type a model for ${selectedBrand}` : `Type a car brand${filter !== 'All' ? ` - ${filter}` : ''}` }
+                                    aria-label="Search"
+                                    autoComplete={selectedBrand ? 'off' : 'on'}
                             />
                                 <button className="searchbar-submit-button" type="submit" aria-label="Search">
                                     <svg className="Search_Icon searchbar-submit-icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor"
