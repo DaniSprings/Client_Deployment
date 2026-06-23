@@ -1,0 +1,56 @@
+.GridLayout{
+  background-color: linear-gradient(135deg, #002e5d 0%, #ab3636 100%);  
+}
+
+.brands-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+    background-color: #ffffff;
+}
+.brands-container {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 200px;
+    text-align: center;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.brand-block {
+    margin-bottom: 10px;
+    flex: 1 1 22%; /* let blocks grow/shrink responsively, ~4 per row */
+    max-width: 260px;    /*larger blocks*/
+    min-width: 160px;
+    text-align: center;
+    padding: 12px;
+    box-sizing: border-box;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.brand-block:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.brand-logo {
+    width: 120px;
+    height: auto;
+    margin-bottom: 10px;
+}
+.brand-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+    padding: 8px;
+}
+.img-brand {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}

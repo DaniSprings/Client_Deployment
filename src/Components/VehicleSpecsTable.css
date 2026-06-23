@@ -1,0 +1,111 @@
+.vehicle-specs-table-shell {
+    margin-top: 1.25rem;
+}
+
+.vehicle-specs-table-wrapper {
+    overflow-x: auto;
+    border-radius: 18px;
+    border: 1px solid #e6dfd6;
+    background: linear-gradient(180deg, #fffdf9 0%, #ffffff 100%);
+    box-shadow: 0 18px 34px rgba(24, 24, 24, 0.08);
+}
+
+.vehicle-specs-table {
+    width: 100%;
+    min-width: 720px;
+    border-collapse: collapse;
+}
+
+.vehicle-specs-table thead th {
+    padding: clamp(0.8rem, 1.2vw, 1.4rem) clamp(0.9rem, 1.1vw, 1.3rem);
+    background: #181818;
+    color: #fff;
+    text-align: left;
+    font-size: clamp(0.75rem, 0.9vw, 1rem);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.vehicle-specs-column-heading {
+    display: grid;
+    gap: 0.2rem;
+}
+
+.vehicle-specs-column-heading span {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.vehicle-specs-column-heading strong {
+    font-size: 0.95rem;
+}
+
+.vehicle-specs-section-row th {
+    padding: 0;
+    border-top: 1px solid #eadfd0;
+    background: #f7efe4;
+}
+
+.vehicle-specs-section-label,
+.vehicle-specs-section-toggle {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.95rem 1.1rem;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6b4a28;
+}
+
+.vehicle-specs-section-toggle {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.vehicle-specs-section-toggle:hover,
+.vehicle-specs-section-toggle:focus-visible {
+    background: rgba(148, 98, 48, 0.08);
+    outline: none;
+}
+
+.vehicle-specs-data-row th,
+.vehicle-specs-data-row td {
+    padding: 0.9rem 1.1rem;
+    border-top: 1px solid #efe8dd;
+    text-align: left;
+    vertical-align: top;
+}
+
+.vehicle-specs-label-cell {
+    width: 280px;
+    background: #fffcf6;
+    color: #262626;
+    font-weight: 700;
+}
+
+.vehicle-specs-value-cell {
+    color: #4a4a4a;
+    background: #fff;
+}
+
+@media (max-width: 720px) {
+    .vehicle-specs-table-shell {
+        margin-top: 1rem;
+    }
+
+    .vehicle-specs-table {
+        min-width: 620px;
+    }
+
+    .vehicle-specs-table thead th,
+    .vehicle-specs-data-row th,
+    .vehicle-specs-data-row td,
+    .vehicle-specs-section-label,
+    .vehicle-specs-section-toggle {
+        padding: 0.8rem 0.85rem;
+    }
+}

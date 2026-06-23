@@ -1,0 +1,21 @@
+<>
+    <Navbar/>
+    <div>
+    <Routes>
+      <Route path="/" element= {<Home/>} />
+      <Route path="/Brands" element= {<Brands/>} />
+      <Route path="/CarStats" element= {<CarStats/>} />
+    </Routes>
+    </div>
+    <Card></Card>
+    <Form/>
+    <Footer/>
+    </>
+    or 
+
+     <>
+    <Navbar/>
+    <Card></Card>
+    <Form/>
+    <Footer/>
+    </>
