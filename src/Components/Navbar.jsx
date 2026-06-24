@@ -525,16 +525,16 @@ function Navbar() {
               className="dropdown"
               onMouseEnter={handleDropdown}
               onMouseLeave={closeDropdown}
-              style={{ position: 'relative', fontSize: '1.2rem', textTransform: 'uppercase' }}
+              style={{ position: 'relative' }}
             >
               <button
                 type="button"
                 className="nav-link dropdown-toggle"
                 onClick={handleDropdown}
-                style={{ cursor: 'pointer', textTransform: 'uppercase', fontSize: '1.2rem' }}
+                style={{ cursor: 'pointer' }}
               >
                 CALCULATE
-                <span className={`dropdown-arrow${dropdownOpen ? ' open' : ''}`} style={{ marginLeft: 6, fontSize: '1.2rem' }}>▼</span>
+                <span className={`dropdown-arrow${dropdownOpen ? ' open' : ''}`} style={{ marginLeft: 6 }}>▼</span>
               </button>
 
               {dropdownOpen && (
@@ -550,7 +550,6 @@ function Navbar() {
             to="/CarStats"
             className="nav-link"
             onClick={() => setMenuOpen(false)}
-            style={{ fontSize: '1.2rem', textTransform: 'uppercase' }}
           >
             COMPARE
           </Link>
@@ -559,7 +558,6 @@ function Navbar() {
             to="/Brands"
             className="nav-link"
             onClick={() => setMenuOpen(false)}
-            style={{ fontSize: '1.2rem', textTransform: 'uppercase' }}
           >
             BRANDS
           </Link>
@@ -567,7 +565,7 @@ function Navbar() {
             type="button"
             className="LoginModal"
             onClick={openLoginModal}
-            style={{ fontSize: '1.2rem', textTransform: 'uppercase', cursor: 'pointer', background: 'none', border: 'none' }}
+            style={{ cursor: 'pointer', background: 'none', border: 'none' }}
           >
             LOGIN
             <svg className="searchbar-action-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -729,9 +727,7 @@ function CustomLink({ to, children, ...props }) {
   const path = window.location.pathname;
   return (
     <li className={path === to ? "active" : ""}>
-      <Link to={to} {...props} className="nav-link" 
-      style={{ fontSize: '1.2rem', 
-               textTransform: 'uppercase' }}>
+      <Link to={to} {...props} className="nav-link">
         {children}
       </Link>
     </li>

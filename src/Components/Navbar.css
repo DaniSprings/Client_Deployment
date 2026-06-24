@@ -60,8 +60,19 @@ body {
   color: #002e5d;
 }
 
+/* ── Unified nav-link typography ── */
+.nav-link,
+button.nav-link,
+a.nav-link,
+.LoginModal {
+  font-size: 1.2rem;
+  font-weight: 700;
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
 a.nav-link {
-  font-size: clamp(2.4rem, 3vw, 3.6rem);
   margin: 0 clamp(12px, 1.8vw, 30px);
 }
 
