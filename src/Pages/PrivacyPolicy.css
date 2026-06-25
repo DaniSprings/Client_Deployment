@@ -1,0 +1,10 @@
+.h1{
+    align-items: center;
+}
+
+.Definition,p {
+    text-align: left;
+}
+.LegalList, p{
+    text-align:left;
+}

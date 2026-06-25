@@ -17,17 +17,18 @@ const Revdistance = lazy(() => import('./Pages/RevDistance.jsx'));
 const Brands = lazy(() => import('./Pages/Brands.jsx'));
 const SearchResults = lazy(() => import('./Pages/SearchResults.jsx'));
 
+const PrivacyPolicy = lazy(() => import('./Pages/PrivacyPolicy.jsx'));
+
 function App() {
   const { width } = useWindowSize();
   const viewportClass = width <= 760 ? 'app-mobile' : width <= 1024 ? 'app-tablet' : 'app-desktop';
-
   return (
     <>
       <Navbar />
       <div className={`App ${viewportClass}`}>
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
-            <Route exact path="/Home" element={<Home />} />
+            <Route exact path="/" element={<Home />} />
             <Route path="/Brands" element={<Brands />} />
             <Route path="/CarStats" element={<CarStats />} />
             <Route path="/Results" element={<SearchResults />} />
