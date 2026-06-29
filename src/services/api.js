@@ -98,15 +98,18 @@ api.interceptors.response.use(
       window.location.href = "/login";
     }
 
+    const serverErrorMessage =
+      response?.data?.error || response?.data?.message || error.message;
+
     console.error(
       `[API Error] ${response?.status || "Network"} ${config?.url}`,
-      error.message,
+      serverErrorMessage,
     );
 
     // Return structured error response
     return Promise.reject({
       status: response?.status,
-      message: response?.data?.message || error.message,
+      message: serverErrorMessage,
       data: response?.data,
       config,
     });
