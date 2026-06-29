@@ -28,7 +28,7 @@ function App() {
       <div className={`App ${viewportClass}`}>
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
-            <Route exact path="/" element={<Home />} />
+            <Route exact path="/Home" element={<Home />} />
             <Route path="/Brands" element={<Brands />} />
             <Route path="/CarStats" element={<CarStats />} />
             <Route path="/Results" element={<SearchResults />} />
