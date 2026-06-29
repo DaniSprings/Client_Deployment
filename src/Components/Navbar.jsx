@@ -47,6 +47,11 @@ const toSuggestionItem = (value, extra = {}) => ({
   ...extra,
 });
 
+const resolveDisplayName = (profile = {}) => {
+  const fullName = [profile?.name, profile?.surname].filter(Boolean).join(' ').trim();
+  return fullName || profile?.username || profile?.email || '';
+};
+
 function Navbar() {
   const { width } = useWindowSize();
   const isMobile  = width <= 768;
@@ -69,7 +74,9 @@ function Navbar() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [filter, setFilter] = useState('All');
   const [currentUserId, setCurrentUserId] = useState(null);
+  const [currentUserName, setCurrentUserName] = useState('');
   const navigate = useNavigate();
+  const isLoggedIn = Boolean(currentUserId);
 
   // Search modal and results state
   const [showSearchModal, setShowSearchModal] = useState(false);
@@ -482,6 +489,75 @@ function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    let isMounted = true;
+
+    const restoreAuthState = async () => {
+      const storedUserId = localStorage.getItem('userId');
+      const storedUsername = localStorage.getItem('username');
+      const authToken = localStorage.getItem('authToken');
+
+      if (storedUserId) {
+        setCurrentUserId(storedUserId);
+      }
+
+      if (storedUsername) {
+        setCurrentUserName(storedUsername);
+      }
+
+      if (!authToken) {
+        return;
+      }
+
+      try {
+        const response = await auth.getCurrentUser();
+        const profile = response?.data || response || {};
+        const resolvedName = resolveDisplayName(profile);
+
+        if (!isMounted) {
+          return;
+        }
+
+        if (profile?.userId) {
+          const normalizedUserId = String(profile.userId);
+          setCurrentUserId(normalizedUserId);
+          localStorage.setItem('userId', normalizedUserId);
+        }
+
+        if (resolvedName) {
+          setCurrentUserName(resolvedName);
+          localStorage.setItem('username', resolvedName);
+        }
+      } catch (error) {
+        console.error('Unable to restore auth user from API:', error);
+      }
+    };
+
+    restoreAuthState();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const handleAuthButtonClick = async () => {
+    if (!isLoggedIn) {
+      openLoginModal();
+      return;
+    }
+
+    try {
+      await auth.logout();
+      setCurrentUserId(null);
+      setCurrentUserName('');
+      localStorage.removeItem('username');
+      showSuccess('Logged out successfully');
+    } catch (error) {
+      console.error('Error logging out:', error);
+      showFailure('Could not log out. Please try again.');
+    }
+  };
+
 
 
   return (
@@ -564,11 +640,16 @@ function Navbar() {
           <button
             type="button"
             className="LoginModal"
-            onClick={openLoginModal}
+            onClick={handleAuthButtonClick}
             style={{ cursor: 'pointer', background: 'none', border: 'none' }}
           >
-            LOGIN
-            <svg className="searchbar-action-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            {isLoggedIn && currentUserName && (
+              <span className="nav-user-label" title={currentUserName}>
+                {currentUserName}
+              </span>
+            )}
+            {isLoggedIn ? 'LOGOUT' : 'LOGIN'}
+            <svg className="login-nav-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
@@ -609,9 +690,14 @@ function Navbar() {
         <LoginModal
           onClose={closeLoginModal}
           onSuccess={({ userId, username }) => {
-            setCurrentUserId(parseInt(userId));
+            const normalizedUserId = String(userId);
+            const resolvedName = username || localStorage.getItem('username') || 'user';
+            setCurrentUserId(normalizedUserId);
+            setCurrentUserName(resolvedName);
+            localStorage.setItem('userId', normalizedUserId);
+            localStorage.setItem('username', resolvedName);
             closeLoginModal();
-            showSuccess(`Logged in as ${username || 'user'}`);
+            showSuccess(`Logged in as ${resolvedName}`);
           }}
           onFailure={(msg) => showFailure(msg, openSignupModal)}
           onSignupClick={openSignupModal}
@@ -655,16 +741,17 @@ function Navbar() {
               closeSignupModal();
               // if SignupForm returned created user info, set local state
               if (data && data.userId) {
-                try {
-                  setCurrentUserId(parseInt(data.userId));
-                } catch {
-                  // Silently ignore parsing errors
-                }
-                localStorage.setItem('userId', data.userId);
-                localStorage.setItem('username', data.username || data.email || '');
+                const normalizedUserId = String(data.userId);
+                const resolvedName = data.username || data.email || '';
+                setCurrentUserId(normalizedUserId);
+                setCurrentUserName(resolvedName);
+                localStorage.setItem('userId', normalizedUserId);
+                localStorage.setItem('username', resolvedName);
               } else {
                 const uid = localStorage.getItem('userId');
-                if (uid) setCurrentUserId(parseInt(uid));
+                const uname = localStorage.getItem('username');
+                if (uid) setCurrentUserId(uid);
+                if (uname) setCurrentUserName(uname);
               }
               showSuccess('Signed up successfully');
             }} onFailure={(msg) => {
