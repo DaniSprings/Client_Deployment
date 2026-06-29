@@ -427,6 +427,10 @@ export const auth = {
     post("/api/auth/search", { userId, searchTerm, filter }),
   getUserSearches: (userId) => get(`/api/auth/user/${userId}/searches`),
 
+  // Send compared car details to the signed-in user's email address.
+  sendComparisonEmail: (cars) =>
+    post("/api/auth/send-comparison-email", { cars }),
+
   // Get current user profile
   getCurrentUser: () => get("/api/auth/me", { cache: false }),
 

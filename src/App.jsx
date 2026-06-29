@@ -16,6 +16,7 @@ const RevCalculator = lazy(() => import('./Pages/RevCalculator.jsx'));
 const Revdistance = lazy(() => import('./Pages/RevDistance.jsx'));
 const Brands = lazy(() => import('./Pages/Brands.jsx'));
 const SearchResults = lazy(() => import('./Pages/SearchResults.jsx'));
+const Login = lazy(() => import('./Pages/Login.jsx'));
 
 const PrivacyPolicy = lazy(() => import('./Pages/PrivacyPolicy.jsx'));
 
@@ -32,6 +33,7 @@ function App() {
             <Route path="/Brands" element={<Brands />} />
             <Route path="/CarStats" element={<CarStats />} />
             <Route path="/Results" element={<SearchResults />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/RevCalculator" element={<RevCalculator />} />
             <Route path="/Revdistance" element={<Revdistance />} />
             <Route exact path="*" element={<NotFound />} />

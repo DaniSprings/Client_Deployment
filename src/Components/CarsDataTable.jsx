@@ -1,4 +1,7 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { auth } from '../services/api';
 
 const EMPTY_FIELD = <span className="empty-field">-</span>;
 
@@ -122,9 +125,53 @@ const renderStatus = (car, lookupState, hasDetails) => {
 };
 
 function CarsDataTable({ cars, carDetailsData, carLookupStatus }) {
+    const navigate = useNavigate();
+    const [isSendingEmail, setIsSendingEmail] = useState(false);
+    const [emailStatusMessage, setEmailStatusMessage] = useState('');
+
     if (!cars.some((car) => car.brand || car.model)) {
         return null;
     }
+
+    const loadedCars = cars
+        .map((car) => ({
+            id: car.id,
+            brand: car.brand,
+            model: car.model,
+            details: carDetailsData[car.id],
+        }))
+        .filter((item) => item.details);
+
+    const handleSendEmail = async () => {
+        const hasAuthToken = Boolean(localStorage.getItem('authToken'));
+        const hasUserId = Boolean(localStorage.getItem('userId'));
+
+        if (!hasAuthToken || !hasUserId) {
+            navigate('/login?redirect=%2FCarStats');
+            return;
+        }
+
+        if (loadedCars.length === 0) {
+            setEmailStatusMessage('No compared data is available to email yet.');
+            return;
+        }
+
+        setIsSendingEmail(true);
+        setEmailStatusMessage('Sending compared data to your email...');
+
+        try {
+            await auth.sendComparisonEmail(loadedCars);
+            setEmailStatusMessage('Compared data was emailed to your registered account.');
+        } catch (error) {
+            const message =
+                error?.data?.message ||
+                error?.message ||
+                'Could not send email right now. Please try again later.';
+            setEmailStatusMessage(message);
+        } finally {
+            setIsSendingEmail(false);
+        }
+    };
 
     return (
         <div className="cars-data-table-section">
@@ -208,10 +255,18 @@ function CarsDataTable({ cars, carDetailsData, carLookupStatus }) {
             </div>
 
             <div className="cars-data-actions">
-                <button type="button" className="cars-data-action-button">
-                    PDF & Send via email
+                <button
+                    type="button"
+                    className="cars-data-action-button"
+                    onClick={handleSendEmail}
+                    disabled={isSendingEmail}
+                >
+                    {isSendingEmail ? 'Sending...' : 'PDF & Send via email'}
                 </button>
             </div>
+            {emailStatusMessage && (
+                <p role="status" aria-live="polite">{emailStatusMessage}</p>
+            )}
         </div>
     );
 }
