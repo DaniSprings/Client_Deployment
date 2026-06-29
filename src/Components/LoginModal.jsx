@@ -1,11 +1,20 @@
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { API_BASE, auth } from '../services/api.js';
+import { API_BASE } from '../services/api.js';
+import authApi from '../services/authApi.js';
 import './LoginModal.css';
 
 function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
+  const LOGIN_EMAIL_KEY = 'rememberedLoginEmail';
+  const LOGIN_PASSWORD_KEY = 'rememberedLoginPassword';
+
   const [isLoading, setIsLoading] = useState(null); // 'google' | 'facebook' | null
   const [errorMsg, setErrorMsg] = useState('');
+  const [email, setEmail] = useState(() => localStorage.getItem(LOGIN_EMAIL_KEY) || '');
+  const [password, setPassword] = useState(() => localStorage.getItem(LOGIN_PASSWORD_KEY) || '');
+  const [rememberCredentials, setRememberCredentials] = useState(
+    () => Boolean(localStorage.getItem(LOGIN_EMAIL_KEY) || localStorage.getItem(LOGIN_PASSWORD_KEY)),
+  );
   const backdropRef = useRef(null);
 
   // Close on Escape key
@@ -69,6 +78,38 @@ function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
     if (e.target === e.currentTarget) onClose();
   };
 
+  const handleExistingUserLogin = async (event) => {
+    event.preventDefault();
+    setErrorMsg('');
+    setIsLoading('password');
+
+    try {
+      const result = await authApi.login(email, password);
+      const resolvedUsername = result?.username || result?.email || email;
+
+      if (rememberCredentials) {
+        localStorage.setItem(LOGIN_EMAIL_KEY, email);
+        localStorage.setItem(LOGIN_PASSWORD_KEY, password);
+      } else {
+        localStorage.removeItem(LOGIN_EMAIL_KEY);
+        localStorage.removeItem(LOGIN_PASSWORD_KEY);
+      }
+
+      localStorage.setItem('username', resolvedUsername);
+      onSuccess?.({
+        userId: result?.userId,
+        username: resolvedUsername,
+        provider: 'password',
+      });
+    } catch (error) {
+      const msg = error?.message || 'Login failed. Please check your details and try again.';
+      setErrorMsg(msg);
+      onFailure?.(msg);
+    } finally {
+      setIsLoading(null);
+    }
+  };
+
   return (
     <div
       className="lm-backdrop modal-overlay"
@@ -111,6 +152,62 @@ function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
             {errorMsg}
           </div>
         )}
+
+        {/* Existing user credentials login */}
+        <form className="lm-credentials" onSubmit={handleExistingUserLogin}>
+          <label className="lm-input-label" htmlFor="login-email">Email</label>
+          <input
+            id="login-email"
+            type="email"
+            className="lm-input"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="username"
+            required
+            disabled={!!isLoading}
+            placeholder="you@example.com"
+          />
+
+          <label className="lm-input-label" htmlFor="login-password">Password</label>
+          <input
+            id="login-password"
+            type="password"
+            className="lm-input"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+            required
+            disabled={!!isLoading}
+            placeholder="Enter your password"
+          />
+
+          <label className="lm-remember-row" htmlFor="remember-credentials">
+            <input
+              id="remember-credentials"
+              type="checkbox"
+              checked={rememberCredentials}
+              onChange={(e) => setRememberCredentials(e.target.checked)}
+              disabled={!!isLoading}
+            />
+            <span>Remember username and password on this device</span>
+          </label>
+
+          <button
+            type="submit"
+            className="lm-btn lm-btn--login"
+            disabled={!!isLoading}
+            aria-busy={isLoading === 'password'}
+          >
+            {isLoading === 'password' ? (
+              <>
+                <span className="lm-spinner lm-spinner--white" aria-hidden="true" />
+                <span>Signing in...</span>
+              </>
+            ) : (
+              <span>Sign in with email</span>
+            )}
+          </button>
+        </form>
 
         {/* Social login buttons */}
         <div className="lm-social">
