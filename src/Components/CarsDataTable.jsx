@@ -261,7 +261,7 @@ function CarsDataTable({ cars, carDetailsData, carLookupStatus }) {
                     onClick={handleSendEmail}
                     disabled={isSendingEmail}
                 >
-                    {isSendingEmail ? 'Sending...' : 'PDF & Send via email'}
+                    {isSendingEmail ? 'Sending...' : 'Email PDF'}
                 </button>
             </div>
             {emailStatusMessage && (
