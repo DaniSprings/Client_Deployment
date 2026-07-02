@@ -603,12 +603,7 @@ function Navbar() {
               onMouseLeave={closeDropdown}
               style={{ position: 'relative' }}
             >
-              <button
-                type="button"
-                className="nav-link dropdown-toggle"
-                onClick={handleDropdown}
-                style={{ cursor: 'pointer' }}
-              >
+              <button type="button" className="nav-link dropdown-toggle" onClick={handleDropdown} style={{ cursor: 'pointer' }} >
                 CALCULATE
                 <span className={`dropdown-arrow${dropdownOpen ? ' open' : ''}`} style={{ marginLeft: 6 }}>▼</span>
               </button>
@@ -622,19 +617,11 @@ function Navbar() {
             </li>
           </ul>
 
-          <Link
-            to="/CarStats"
-            className="nav-link"
-            onClick={() => setMenuOpen(false)}
-          >
+          <Link to="/CarStats" className="nav-link" onClick={() => setMenuOpen(false)} >
             COMPARE
           </Link>
 
-          <Link
-            to="/Brands"
-            className="nav-link"
-            onClick={() => setMenuOpen(false)}
-          >
+          <Link to="/Brands" className="nav-link" onClick={() => setMenuOpen(false)}>
             BRANDS
           </Link>
           <button
