@@ -30,14 +30,14 @@ function App() {
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
             <Route path="/" element element={<Home/>} />
-            <Route exact path="/Home" element={<Home />} />
+            <Route path="/Home" element={<Home />} />
             <Route path="/Brands" element={<Brands />} />
             <Route path="/CarStats" element={<CarStats />} />
             <Route path="/Results" element={<SearchResults />} />
             <Route path="/login" element={<Login />} />
             <Route path="/RevCalculator" element={<RevCalculator />} />
             <Route path="/Revdistance" element={<Revdistance />} />
-            <Route exact path="*" element={<NotFound />} />
+            <Route path="*" element={<NotFound />} />
             <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
           </Routes>
         </Suspense>
