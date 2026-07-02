@@ -13,7 +13,7 @@ export default defineConfig({
     open: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:4000',
+        target: 'https://clientapi-production-afc7.up.railway.app',
         changeOrigin: true,
         secure: false,
       },
