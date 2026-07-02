@@ -29,7 +29,7 @@ function App() {
       <div className={`App ${viewportClass}`}>
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
-            <Route path="/" element element={<Home/>} />
+            <Route path="/" element={<Home />} />
             <Route path="/Home" element={<Home />} />
             <Route path="/Brands" element={<Brands />} />
             <Route path="/CarStats" element={<CarStats />} />
@@ -37,8 +37,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/RevCalculator" element={<RevCalculator />} />
             <Route path="/Revdistance" element={<Revdistance />} />
-            <Route path="*" element={<NotFound />} />
             <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
         <Analytics />
