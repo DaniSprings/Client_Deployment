@@ -5,7 +5,7 @@
  * All endpoints are read-only (GET requests only).
  */
 
-const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://clientapi-production-afc7.up.railway.app').replace(/\/$/, '');
+const API_BASE_URL = (import.meta.env.VITE_API_URL || 'https://clientapi-production-afc7.up.railway.app').replace(/\/$/, '');
 
 /**
  * Generic fetch wrapper with error handling

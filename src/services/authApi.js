@@ -4,7 +4,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL
   ? `${import.meta.env.VITE_API_URL}/api/auth`
       .replace(/\/+/g, "/")
       .replace(":/", "://")
-  : "http://clientapi-production-afc7.up.railway.app/api/auth";
+  : "https://clientapi-production-afc7.up.railway.app/api/auth";
 
 // Create dedicated axios instance for auth
 const authAxios = axios.create({
