@@ -670,7 +670,7 @@ function Navbar() {
             openSearchModal={openSearchModal}
             showSearchModal={showSearchModal}
           />
-      <hr/>
+      
 
       {/* Login modal */}
       {showLoginModal && (
