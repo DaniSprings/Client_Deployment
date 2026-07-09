@@ -7,7 +7,7 @@ import './BrandGrid.css';
 const brands = [
   // Row 1
   [
-    { name: "Alfa Romeo", src: "https://i.ibb.co/XSsT9h5/ALFA-ROMEO.png" },
+    { name: "Alfa Romeo", src: "https://i.ibb.co/YTPn1VMF/ALFA-ROMEO-1.png" },
     { name: "Ashok Leyland", src: "https://i.ibb.co/2yW1RdB/ASHOKLEY-NS.png" },
     { name: "Aston Martin", src: "https://i.ibb.co/NrxWq4b/Aston-Martin-Logo-960x540.png" },
     { name: "Audi", src: "https://i.ibb.co/jJfx3t5/AUDI.jpg" },
@@ -16,7 +16,7 @@ const brands = [
   [
     { name: "BAIC", src: "https://i.ibb.co/2dwg9Bv/BAIC-Logo-Vector-svg.png" },
     { name: "Bentley", src: "https://i.ibb.co/jR5Vbkp/bentley-logo-png-transparent.png" },
-    { name: "BMW", src: "https://i.ibb.co/5BSV7GY/BMW.png" },
+    { name: "BMW", src: "https://i.ibb.co/YBrwh0Kg/BMW-1.png" },
     { name: "BYD", src: "https://i.ibb.co/3SYqML6/BYD-Logo.png" },
   ],
   // Row 3
@@ -29,9 +29,9 @@ const brands = [
   // Row 4
   [
     { name: "Fiat", src: "https://i.ibb.co/1Lkwkx1/Fiat-Logo.png" },
-    { name: "Ford", src: "https://i.ibb.co/9ZtwrxH/Ford.png" },
+    { name: "Ford", src: "https://i.ibb.co/ZCs6MxW/Ford-1.png" },
     { name: "Foton", src: "https://i.ibb.co/TtykNPv/Foton-Motor-Logo.png" },
-    { name: "GAC", src: "https://i.ibb.co/d79jsbM/GAC.png" },
+    { name: "GAC", src: "https://i.ibb.co/bgb36Rt8/GAC-1.png" },
   ],
   // Row 5
   [
@@ -52,7 +52,7 @@ const brands = [
     { name: "Jaguar", src: "https://i.ibb.co/XZXLwRT/Jaguar.jpg" },
     { name: "Jeep", src: "https://i.ibb.co/CtXTQpP/Jeep-logo-svg.png" },
     { name: "Jetour", src: "https://i.ibb.co/LCKZN0y/Jetour-logo-svg.png" },
-    { name: "KIA", src: "https://i.ibb.co/RSgcTMC/KIA.jpg" },
+    { name: "KIA", src: "https://i.ibb.co/yFDJ4CFr/KIA-1.jpg" },
   ],
   // Row 8
   [
@@ -66,7 +66,7 @@ const brands = [
     { name: "Maserati", src: "https://i.ibb.co/qrSBRCY/Maserati-Logo-768x432.png" },
     { name: "Mazda", src: "https://i.ibb.co/FVgsT9S/Mazda.png" },
     { name: "Mclaren", src: "https://i.ibb.co/Z27SYj3/Mc-Laren-Logo.png" },
-    { name: "Mercedes-Benz AMG", src: "https://i.ibb.co/0ZQ8hsf/mercedes-benz-amg-white-logo.png" },
+    { name: "Mercedes-Benz AMG", src: "https://i.ibb.co/G46Pz2rx/mercedes-benz-amg-white-logo-1.png" },
   ],
   // Row 10
   [
@@ -77,7 +77,7 @@ const brands = [
   ],
   // Row 11
   [
-    { name: "Nissan", src: "https://i.ibb.co/J7MXQL4/Nissan.png" },
+    { name: "Nissan", src: "https://i.ibb.co/0pnFVZhj/Nissan-1.png" },
     { name: "Omoda", src: "https://i.ibb.co/x39mgKp/Omoda.png" },
     { name: "Opel", src: "https://i.ibb.co/sCVx9vr/Opel.jpg" },
     { name: "Peugeot", src: "https://i.ibb.co/3Tqw9S2/Peugeot.jpg" },
