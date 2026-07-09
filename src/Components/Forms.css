@@ -71,6 +71,18 @@
 .form-input:focus {
   border-color: #89c8ff;
   box-shadow: 0 0 8px rgba(137, 200, 255, 0.3);
+  color: #fff;
+}
+
+.form-input:not(:placeholder-shown) {
+  color: #fff;
+}
+
+.form-input:-webkit-autofill,
+.form-input:-webkit-autofill:hover,
+.form-input:-webkit-autofill:focus,
+.form-input:-webkit-autofill:active {
+  -webkit-text-fill-color: #fff;
 }
 
 .form-button {

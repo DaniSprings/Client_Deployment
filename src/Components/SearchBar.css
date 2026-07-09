@@ -106,6 +106,18 @@
     color: #fff;
 }
 
+.SearchBarContainer input:focus,
+.SearchBarContainer input:not(:placeholder-shown) {
+    color: #fff;
+}
+
+.SearchBarContainer input:-webkit-autofill,
+.SearchBarContainer input:-webkit-autofill:hover,
+.SearchBarContainer input:-webkit-autofill:focus,
+.SearchBarContainer input:-webkit-autofill:active {
+    -webkit-text-fill-color: #fff;
+}
+
 .SearchBarContainer input::placeholder {
     color: #d1d1d1;
 }

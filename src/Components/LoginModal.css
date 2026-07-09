@@ -195,7 +195,7 @@
 
 .lm-input:not(:placeholder-shown) {
   background: #666;
-  color:#666;
+  color: #fff;
 }
 
 .lm-input:-webkit-autofill,
@@ -254,6 +254,7 @@
   outline: none;
   border-color: #cc0000;
   box-shadow: 0 0 0 3px rgba(204, 0, 0, 0.14);
+  color: #fff;
 }
 
 .lm-remember-row {

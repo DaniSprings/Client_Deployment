@@ -41,6 +41,34 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 16px;
+  background: #333;
+  color: #fff;
+}
+
+.option:focus,
+.tank-size:focus,
+.distance:focus {
+  color: #fff;
+}
+
+.distance:not(:placeholder-shown) {
+  color: #fff;
+}
+
+.option:-webkit-autofill,
+.option:-webkit-autofill:hover,
+.option:-webkit-autofill:focus,
+.option:-webkit-autofill:active,
+.tank-size:-webkit-autofill,
+.tank-size:-webkit-autofill:hover,
+.tank-size:-webkit-autofill:focus,
+.tank-size:-webkit-autofill:active,
+.distance:-webkit-autofill,
+.distance:-webkit-autofill:hover,
+.distance:-webkit-autofill:focus,
+.distance:-webkit-autofill:active {
+  -webkit-text-fill-color: #fff;
+  box-shadow: 0 0 0 1000px #333 inset;
 }
 
 .calculate {

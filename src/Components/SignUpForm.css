@@ -79,6 +79,10 @@
   color: #d1d1d1;
 }
 
+.form-group input:not(:placeholder-shown) {
+  color: #fff;
+}
+
 .form-group input:-webkit-autofill,
 .form-group input:-webkit-autofill:hover,
 .form-group input:-webkit-autofill:focus,
