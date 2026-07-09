@@ -188,8 +188,23 @@
   padding: 0.62rem 0.72rem;
   font-family: 'Barlow', sans-serif;
   font-size: 0.92rem;
+  background: #fff;
   color:  white;
   transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.lm-input:not(:placeholder-shown) {
+  background: #666;
+  color: #fff;
+}
+
+.lm-input:-webkit-autofill,
+.lm-input:-webkit-autofill:hover,
+.lm-input:-webkit-autofill:focus,
+.lm-input:-webkit-autofill:active {
+  -webkit-text-fill-color: #fff;
+  box-shadow: 0 0 0 1000px #666 inset;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 .lm-password-wrap {
