@@ -5,7 +5,24 @@
  * All endpoints are read-only (GET requests only).
  */
 
-const API_BASE_URL = (import.meta.env.VITE_API_URL || 'https://clientapi-production-afc7.up.railway.app').replace(/\/$/, '');
+const normalizeApiBase = (value, fallback) => {
+  const raw = (value || fallback || "").trim();
+
+  if (!raw) {
+    return fallback;
+  }
+
+  const withProtocol = /^https?:\/\//i.test(raw)
+    ? raw
+    : `https://${raw.replace(/^\/+/, "")}`;
+
+  return withProtocol.replace(/\/$/, "");
+};
+
+const API_BASE_URL = normalizeApiBase(
+  import.meta.env.VITE_API_URL,
+  "https://clientapi-production-afc7.up.railway.app",
+);
 
 /**
  * Generic fetch wrapper with error handling

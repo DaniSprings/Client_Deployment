@@ -1,8 +1,23 @@
 import axios from "axios";
 
-export const API_BASE = (
-  import.meta.env.VITE_API_URL || "https://clientapi-production-afc7.up.railway.app"
-).replace(/\/$/, "");
+const normalizeApiBase = (value, fallback) => {
+  const raw = (value || fallback || "").trim();
+
+  if (!raw) {
+    return fallback;
+  }
+
+  const withProtocol = /^https?:\/\//i.test(raw)
+    ? raw
+    : `https://${raw.replace(/^\/+/, "")}`;
+
+  return withProtocol.replace(/\/$/, "");
+};
+
+export const API_BASE = normalizeApiBase(
+  import.meta.env.VITE_API_URL,
+  "https://clientapi-production-afc7.up.railway.app",
+);
 
 const FALLBACK_API_BASE = "http://localhost:4000"; // Fallback to local development server if primary API is unreachable
 const isFallbackEnabled = API_BASE !== FALLBACK_API_BASE;
@@ -248,7 +263,7 @@ export const models = {
   getBrandsWithCount: () =>
     get("/api/models/brands/with-count", { cache: true }),
   getModelsByBrand: (brand) =>
-    get(`/api/models/models/by-brand?brand=${encodeURIComponent(brand)}`, {
+    get(`/api/models/model-table/models/by-brand?brand=${encodeURIComponent(brand)}`, {
       cache: true,
     }),
   getYearsByBrandModel: (brand, model) =>

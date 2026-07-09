@@ -1,10 +1,23 @@
 import axios from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL
-  ? `${import.meta.env.VITE_API_URL}/api/auth`
-      .replace(/\/+/g, "/")
-      .replace(":/", "://")
-  : "https://clientapi-production-afc7.up.railway.app/api/auth";
+const normalizeApiBase = (value, fallback) => {
+  const raw = (value || fallback || "").trim();
+
+  if (!raw) {
+    return fallback;
+  }
+
+  const withProtocol = /^https?:\/\//i.test(raw)
+    ? raw
+    : `https://${raw.replace(/^\/+/, "")}`;
+
+  return withProtocol.replace(/\/$/, "");
+};
+
+const API_BASE_URL = `${normalizeApiBase(
+  import.meta.env.VITE_API_URL,
+  "https://clientapi-production-afc7.up.railway.app",
+)}/api/auth`;
 
 // Create dedicated axios instance for auth
 const authAxios = axios.create({
