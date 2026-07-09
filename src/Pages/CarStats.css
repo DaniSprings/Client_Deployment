@@ -27,6 +27,7 @@
     border: 1px solid #ddd;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     min-width: 160px;
+    color: #fff;
 }
 
 .carstat-container .form-group {
@@ -37,7 +38,7 @@
     display: block;
     margin-bottom: 3px;
     font-weight: bold;
-    color: #333;
+    color: #fff;
     font-size: 12px;
 }
 
@@ -50,6 +51,11 @@
     border-radius: 4px;
     font-size: 12px;
     box-sizing: border-box;
+}
+
+.carstat-container input::placeholder {
+    color: #fff;
+    opacity: 0.85;
 }
 
 .carstat-container select {
@@ -95,6 +101,11 @@
     background-position: right 6px center;
     background-size: 18px;
     padding-right: 28px;
+}
+
+.carstat-container select option {
+    color: #fff;
+    background-color: #333;
 }
 
 .carstat-container input:focus {
