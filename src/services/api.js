@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const API_BASE = (
-  import.meta.env.VITE_API_URL || "http://localhost:4000"
+  import.meta.env.VITE_API_URL || "https://clientapi-production-afc7.up.railway.app"
 ).replace(/\/$/, "");
 
 const FALLBACK_API_BASE = "http://localhost:4000"; // Fallback to local development server if primary API is unreachable
