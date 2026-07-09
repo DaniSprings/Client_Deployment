@@ -97,6 +97,17 @@
     border: 1px solid #ccc;
     border-radius: 6px 0 0 6px;
     font-size: 1.3rem;
+    background: #333;
+    color: #fff;
+}
+
+.SearchBarContainer input {
+    background: #333;
+    color: #fff;
+}
+
+.SearchBarContainer input::placeholder {
+    color: #d1d1d1;
 }
 
 .searchbar-submit-button {

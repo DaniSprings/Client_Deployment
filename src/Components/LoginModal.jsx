@@ -12,6 +12,7 @@ function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
   const [errorMsg, setErrorMsg] = useState('');
   const [email, setEmail] = useState(() => localStorage.getItem(LOGIN_EMAIL_KEY) || '');
   const [password, setPassword] = useState(() => localStorage.getItem(LOGIN_PASSWORD_KEY) || '');
+  const [showPassword, setShowPassword] = useState(false);
   const [rememberCredentials, setRememberCredentials] = useState(
     () => Boolean(localStorage.getItem(LOGIN_EMAIL_KEY) || localStorage.getItem(LOGIN_PASSWORD_KEY)),
   );
@@ -169,17 +170,41 @@ function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
           />
 
           <label className="lm-input-label" htmlFor="login-password">Password</label>
-          <input
-            id="login-password"
-            type="password"
-            className="lm-input"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-            required
-            disabled={!!isLoading}
-            placeholder="Enter your password"
-          />
+          <div className="lm-password-wrap">
+            <input
+              id="login-password"
+              type={showPassword ? 'text' : 'password'}
+              className="lm-input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+              required
+              disabled={!!isLoading}
+              placeholder="Enter your password"
+            />
+            <button
+              type="button"
+              className="lm-password-toggle"
+              onClick={() => setShowPassword((prev) => !prev)}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-pressed={showPassword}
+              disabled={!!isLoading}
+            >
+              {showPassword ? (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-5 0-9.27-3.11-11-8 1.03-2.9 2.96-5.13 5.43-6.41"/>
+                  <path d="M1 1l22 22"/>
+                  <path d="M9.9 4.24A10.95 10.95 0 0 1 12 4c5 0 9.27 3.11 11 8a11.06 11.06 0 0 1-2.16 3.19"/>
+                  <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/>
+                </svg>
+              ) : (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              )}
+            </button>
+          </div>
 
           <label className="lm-remember-row" htmlFor="remember-credentials">
             <input
