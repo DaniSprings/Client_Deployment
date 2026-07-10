@@ -664,7 +664,7 @@ function Navbar() {
                   to="/Admin"
                   className="nav-link"
                   onClick={() => setMenuOpen(false)}
-                  style={{ color: '#AB3636', fontWeight: 700 }}
+                  style={{ color: '#fff', fontWeight: 700 }}
                 >
                   ADMIN
                 </Link>
