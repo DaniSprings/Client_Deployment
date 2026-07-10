@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import CarsDataTable from '../Components/CarsDataTable.jsx';
 import './CarStats.css';
-import { models } from '../services/api.js';
+import { models, auth } from '../services/api.js';
 import {
     getBrandAutoCorrect,
     getBrandModels,
@@ -18,7 +18,6 @@ import {
 } from '../utils/liveVehicleLookup.js';
 
 function CarStats() {
-    // Field configuration array
     const formFields = [
         {
             name: 'brand',
@@ -60,6 +59,58 @@ function CarStats() {
     const [searchParams] = useSearchParams();
     const autoLoadRef = useRef(false);
 
+    // ─── Tracking helpers ────────────────────────────────────────────────────
+    const getCurrentUserId = () => localStorage.getItem('userId');
+
+    /**
+     * Fire-and-forget tracking — never blocks the UI.
+     * type: 'comparison' | 'vehicle_view'
+     */
+    const trackEvent = useCallback((label, filterPayload) => {
+        const userId = getCurrentUserId();
+        if (!userId) return; // guests are not tracked
+
+        auth.trackSearch(userId, label, filterPayload).catch((err) => {
+            console.warn('[CarStats] tracking error (non-fatal):', err);
+        });
+    }, []);
+
+    // Track a comparison whenever carDetailsData changes and has ≥ 2 entries
+    const trackedComparisonRef = useRef('');
+    useEffect(() => {
+        const compared = Object.values(carDetailsData);
+        if (compared.length < 2) return;
+
+        const key = compared.map(d => `${d.brand}|${d.model}`).sort().join(',');
+        if (key === trackedComparisonRef.current) return; // already tracked this exact set
+        trackedComparisonRef.current = key;
+
+        const label = `Compare: ${compared.map(d => `${d.brand} ${d.model}`).join(' vs ')}`;
+        trackEvent(label, {
+            type: 'comparison',
+            cars: compared.map(d => ({ brand: d.brand, model: d.model })),
+        });
+    }, [carDetailsData, trackEvent]);
+
+    // Track individual vehicle detail views whenever a single car result loads
+    const trackedViewsRef = useRef(new Set());
+    useEffect(() => {
+        Object.values(carDetailsData).forEach((details) => {
+            const key = `${details.brand}|${details.model}`;
+            if (trackedViewsRef.current.has(key)) return;
+            trackedViewsRef.current.add(key);
+
+            trackEvent(`View: ${details.brand} ${details.model}`, {
+                type: 'vehicle_view',
+                brand: details.brand,
+                model: details.model,
+                price: details.price || null,
+            });
+        });
+    }, [carDetailsData, trackEvent]);
+
+    // ─── Existing logic (unchanged) ──────────────────────────────────────────
+
     const clearCarLookupState = (id) => {
         setCarDetailsData(prev => {
             const next = { ...prev };
@@ -75,7 +126,6 @@ function CarStats() {
 
     const loadModelsForBrand = async (id, brand) => {
         const fallbackModels = getBrandModels(brand);
-
         try {
             const response = await models.getModelsByBrand(brand);
             const liveModels = Array.isArray(response.data) ? response.data : [];
@@ -87,12 +137,7 @@ function CarStats() {
     };
 
     const fetchVehicleRecord = async (brand, model) => {
-        const response = await models.getVehicleData({
-            brand,
-            model,
-            limit: 1
-        });
-
+        const response = await models.getVehicleData({ brand, model, limit: 1 });
         return response.data?.data?.[0] || null;
     };
 
@@ -129,11 +174,7 @@ function CarStats() {
                         return [car.id, result];
                     } catch (error) {
                         console.error(`Error fetching data for ${car.brand} ${car.model}:`, error);
-                        return [car.id, {
-                            status: 'error',
-                            message: 'Search failed. Please try again.',
-                            details: null
-                        }];
+                        return [car.id, { status: 'error', message: 'Search failed. Please try again.', details: null }];
                     }
                 })
             );
@@ -154,15 +195,8 @@ function CarStats() {
 
             setCarStatsList(prev => prev.map((car) => {
                 const result = results.find(([id]) => id === car.id)?.[1];
-
-                if (!result?.resolvedModel) {
-                    return car;
-                }
-
-                return {
-                    ...car,
-                    model: result.resolvedModel
-                };
+                if (!result?.resolvedModel) return car;
+                return { ...car, model: result.resolvedModel };
             }));
 
             setCarDetailsData(prev => merge ? { ...prev, ...nextDetails } : nextDetails);
@@ -180,144 +214,82 @@ function CarStats() {
 
     useEffect(() => {
         const controller = new AbortController();
-
         const load = async () => {
             try {
-                // Still keep the database-based brands with count for other features
                 const brandsCountRes = await models.getBrandsWithCount();
                 setBrandsWithCount(brandsCountRes.data);
-
                 setLoading(false);
             } catch (e) {
                 if (e.name !== "AbortError") console.error(e);
                 setLoading(false);
             }
         };
-
         load();
         return () => controller.abort();
     }, []);
 
-
     const handleChange = (id, e) => {
         const { name, value } = e.target;
-
         if (name === 'brand') {
-            setCarStatsList(prev =>
-                prev.map(car =>
-                    car.id === id ? { ...car, [name]: value, model: '' } : car
-                )
-            );
-
+            setCarStatsList(prev => prev.map(car => car.id === id ? { ...car, [name]: value, model: '' } : car));
             setModelsList(prev => ({ ...prev, [id]: [] }));
             clearCarLookupState(id);
             setShowSuggestions(prev => ({ ...prev, [`brand-${id}`]: true }));
-            setFilteredBrands(prev => ({
-                ...prev,
-                [`brand-${id}`]: searchCatalogBrands(value)
-            }));
+            setFilteredBrands(prev => ({ ...prev, [`brand-${id}`]: searchCatalogBrands(value) }));
         } else if (name === 'model') {
             const currentCar = carStatsList.find(car => car.id === id);
             const currentBrand = currentCar?.brand || '';
-
             setShowSuggestions(prev => ({ ...prev, [`model-${id}`]: Boolean(currentBrand) }));
-            setFilteredBrands(prev => ({
-                ...prev,
-                [`model-${id}`]: searchCatalogModels(currentBrand, value)
-            }));
-
-            setCarStatsList(prev =>
-                prev.map(car =>
-                    car.id === id ? { ...car, [name]: value } : car
-                )
-            );
+            setFilteredBrands(prev => ({ ...prev, [`model-${id}`]: searchCatalogModels(currentBrand, value) }));
+            setCarStatsList(prev => prev.map(car => car.id === id ? { ...car, [name]: value } : car));
             clearCarLookupState(id);
         }
     };
 
     const handleBrandBlur = async (id, value) => {
         const correctedBrand = getBrandAutoCorrect(value);
-
         if (correctedBrand) {
-            setCarStatsList(prev =>
-                prev.map(car =>
-                    car.id === id ? { ...car, brand: correctedBrand, model: '' } : car
-                )
-            );
+            setCarStatsList(prev => prev.map(car => car.id === id ? { ...car, brand: correctedBrand, model: '' } : car));
             await loadModelsForBrand(id, correctedBrand);
         }
-
         setShowSuggestions(prev => ({ ...prev, [`brand-${id}`]: false }));
     };
 
     const handleModelBlur = async (id, value) => {
         const brand = carStatsList.find(car => car.id === id)?.brand || '';
         const correctedModel = getModelAutoCorrect(brand, value);
-
         if (correctedModel) {
-            setCarStatsList(prev =>
-                prev.map(car =>
-                    car.id === id ? { ...car, model: correctedModel } : car
-                )
-            );
+            setCarStatsList(prev => prev.map(car => car.id === id ? { ...car, model: correctedModel } : car));
         }
         setShowSuggestions(prev => ({ ...prev, [`model-${id}`]: false }));
     };
 
-
-
     const handleBrandSelect = async (id, brand) => {
-        setCarStatsList(prev =>
-            prev.map(car =>
-                car.id === id ? { ...car, brand: brand, model: '' } : car
-            )
-        );
+        setCarStatsList(prev => prev.map(car => car.id === id ? { ...car, brand: brand, model: '' } : car));
         setShowSuggestions(prev => ({ ...prev, [id]: false, [`brand-${id}`]: false }));
         await loadModelsForBrand(id, brand);
         clearCarLookupState(id);
     };
 
     const handleModelSelect = (id, model) => {
-        setCarStatsList(prev =>
-            prev.map(car =>
-                car.id === id ? { ...car, model: model } : car
-            )
-        );
+        setCarStatsList(prev => prev.map(car => car.id === id ? { ...car, model: model } : car));
         setShowSuggestions(prev => ({ ...prev, [`model-${id}`]: false }));
-
         clearCarLookupState(id);
     };
 
     const handleModelSearch = async (id) => {
         const currentCar = carStatsList.find(car => car.id === id);
-
-        if (!currentCar?.brand || !currentCar?.model) {
-            return;
-        }
-
+        if (!currentCar?.brand || !currentCar?.model) return;
         await fetchVehicleDetailsForCars([currentCar], { merge: true });
     };
 
-
-
-
-    const handleBrandChange = (id, value) => {
-        handleChange(id, { target: { name: 'brand', value } });
-    };
-
-    const handleModelChange = (id, value) => {
-        handleChange(id, { target: { name: 'model', value } });
-    };
-
-
+    const handleBrandChange = (id, value) => handleChange(id, { target: { name: 'brand', value } });
+    const handleModelChange = (id, value) => handleChange(id, { target: { name: 'model', value } });
 
     const handleAddCar = () => {
         if (carStatsList.length < 6) {
             const newId = Math.max(...carStatsList.map(car => car.id)) + 1;
-            setCarStatsList(prev => [
-                ...prev,
-                { id: newId, brand: '', model: '' }
-            ]);
+            setCarStatsList(prev => [...prev, { id: newId, brand: '', model: '' }]);
         }
     };
 
@@ -335,27 +307,16 @@ function CarStats() {
     useEffect(() => {
         const make = (searchParams.get('make') || '').trim();
         const model = (searchParams.get('model') || '').trim();
-
-        if (!make || !model || autoLoadRef.current) {
-            return;
-        }
-
+        if (!make || !model || autoLoadRef.current) return;
         autoLoadRef.current = true;
         const preset = [{ id: 1, brand: make, model }];
         setCarStatsList(preset);
-
-        const autoLoadVehicleDetails = async () => {
-            await fetchVehicleDetailsForCars(preset);
-        };
-
-        autoLoadVehicleDetails();
+        fetchVehicleDetailsForCars(preset);
     }, [fetchVehicleDetailsForCars, searchParams]);
 
     return (
         <div className="carstat-main-container">
             <h1>Choose your Cars</h1>
-
-            {/* Brands Display Section */}
 
             <form onSubmit={handleSubmit}>
                 <div className="carstat-row">
@@ -367,23 +328,15 @@ function CarStats() {
                                     : field.disabled;
 
                                 const handleFieldChange = (value) => {
-                                    if (field.onChange === 'handleBrandChange') {
-                                        handleBrandChange(car.id, value);
-                                    } else if (field.onChange === 'handleModelChange') {
-                                        handleModelChange(car.id, value);
-                                    } else if (field.onChange === 'handleBrandSelect') {
-                                        handleBrandSelect(car.id, value);
-                                    } else if (field.onChange === 'handleModelSelect') {
-                                        handleModelSelect(car.id, value);
-                                    }
+                                    if (field.onChange === 'handleBrandChange') handleBrandChange(car.id, value);
+                                    else if (field.onChange === 'handleModelChange') handleModelChange(car.id, value);
+                                    else if (field.onChange === 'handleBrandSelect') handleBrandSelect(car.id, value);
+                                    else if (field.onChange === 'handleModelSelect') handleModelSelect(car.id, value);
                                 };
 
                                 const handleFieldBlur = () => {
-                                    if (field.onBlur === 'handleBrandBlur') {
-                                        handleBrandBlur(car.id, car.brand);
-                                    } else if (field.onBlur === 'handleModelBlur') {
-                                        handleModelBlur(car.id, car.model);
-                                    }
+                                    if (field.onBlur === 'handleBrandBlur') handleBrandBlur(car.id, car.brand);
+                                    else if (field.onBlur === 'handleModelBlur') handleModelBlur(car.id, car.model);
                                 };
 
                                 return (
@@ -404,7 +357,6 @@ function CarStats() {
                                                     onFocus={() => {
                                                         setShowSuggestions(prev => ({ ...prev, [`${field.name}-${car.id}`]: true }));
                                                         const availableModels = modelsList[car.id]?.length ? modelsList[car.id] : getLookupModelOptions(car.brand, getBrandModels(car.brand));
-                                                        // Show all brands/models on focus if field is empty
                                                         if (field.name === 'brand' && car.brand.length === 0) {
                                                             setFilteredBrands(prev => ({ ...prev, [`brand-${car.id}`]: searchCatalogBrands('') }));
                                                         } else if (field.name === 'brand') {
@@ -428,10 +380,7 @@ function CarStats() {
                                                         onClick={() => {
                                                             const availableModels = modelsList[car.id]?.length ? modelsList[car.id] : getLookupModelOptions(car.brand, getBrandModels(car.brand));
                                                             const isModelConfirmed = availableModels.some((option) => normalizeLookupValue(option) === normalizeLookupValue(car.model));
-
-                                                            if (car.model && car.brand && isModelConfirmed) {
-                                                                handleModelSearch(car.id);
-                                                            }
+                                                            if (car.model && car.brand && isModelConfirmed) handleModelSearch(car.id);
                                                         }}
                                                         disabled={!car.model || !car.brand || !(modelsList[car.id]?.length ? modelsList[car.id] : getLookupModelOptions(car.brand, getBrandModels(car.brand))).some((option) => normalizeLookupValue(option) === normalizeLookupValue(car.model)) || isDisabled}
                                                         title="Search for this model"
@@ -445,11 +394,8 @@ function CarStats() {
                                                             <div key={idx} className="suggestion-item"
                                                                 onMouseDown={(event) => {
                                                                     event.preventDefault();
-                                                                    if (field.name === 'brand') {
-                                                                        handleBrandSelect(car.id, option);
-                                                                    } else if (field.name === 'model') {
-                                                                        handleModelSelect(car.id, option);
-                                                                    }
+                                                                    if (field.name === 'brand') handleBrandSelect(car.id, option);
+                                                                    else if (field.name === 'model') handleModelSelect(car.id, option);
                                                                 }}
                                                             >
                                                                 {option}
@@ -464,7 +410,7 @@ function CarStats() {
                             })}
 
                             {carStatsList.length > 1 && (
-                                <button type="button" className="btn-remove" onClick={() => handleRemoveCar(car.id)} >
+                                <button type="button" className="btn-remove" onClick={() => handleRemoveCar(car.id)}>
                                     Remove
                                 </button>
                             )}
@@ -473,12 +419,7 @@ function CarStats() {
                 </div>
 
                 <div className="carstat-button-group">
-                    <button
-                        type="button"
-                        className="btn-add"
-                        onClick={handleAddCar}
-                        disabled={carStatsList.length >= 6}
-                    >
+                    <button type="button" className="btn-add" onClick={handleAddCar} disabled={carStatsList.length >= 6}>
                         + Add Car (Max 6)
                     </button>
                     <button type="submit" className="btn-submit" disabled={fetchingDetails}>
@@ -494,7 +435,6 @@ function CarStats() {
                 carLookupStatus={carLookupStatus}
             />
 
-            {/* Car Details Results Section */}
             {Object.keys(carDetailsData).length > 0 && (
                 <div className="car-details-results">
                     <h2>Compared Results</h2>
@@ -506,9 +446,7 @@ function CarStats() {
                                 <div className="detail-section">
                                     <h4>Price</h4>
                                     <p className="price-value">
-                                        {details.price && details.price > 0
-                                            ? `R${details.price.toLocaleString()}`
-                                            : 'N/A'}
+                                        {details.price && details.price > 0 ? `R${details.price.toLocaleString()}` : 'N/A'}
                                     </p>
                                 </div>
 
@@ -535,8 +473,8 @@ function CarStats() {
                                 {(details.length || details.widthExclMirrorsInclMirrors || details.height || details.wheelbase || details.groundClearance) && (
                                     <div className="detail-section">
                                         <h4>Dimensions</h4>
-                                        <p><strong>length:</strong> {details.length || 'N/A'}</p>
-                                        <p><strong>width_excl_mirrors_incl_mirrors:</strong> {details.widthExclMirrorsInclMirrors || 'N/A'}</p>
+                                        <p><strong>Length:</strong> {details.length || 'N/A'}</p>
+                                        <p><strong>Width:</strong> {details.widthExclMirrorsInclMirrors || 'N/A'}</p>
                                         <p><strong>Height:</strong> {details.height || 'N/A'}</p>
                                         <p><strong>Wheelbase:</strong> {details.wheelbase || 'N/A'}</p>
                                         <p><strong>Ground Clearance:</strong> {details.groundClearance || 'N/A'}</p>
@@ -555,4 +493,5 @@ function CarStats() {
         </div>
     );
 }
+
 export default CarStats;

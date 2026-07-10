@@ -2,7 +2,7 @@
   /* Color Variables */
   --text: #6b6375;
   --text-h: #08060d;
-  --bg: #fff;
+  --bg:linear-gradient(135deg, #002e5d 0%, #ab3636 100%);
   --border: #e5e4e7;
   --code-bg: #f4f3ec;
   --accent: #aa3bff;

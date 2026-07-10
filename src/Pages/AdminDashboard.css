@@ -1,0 +1,465 @@
+/* ─── Design tokens ─────────────────────────────────────────────────────────
+   Matches RevReview's dark/red identity from Navbar.css
+──────────────────────────────────────────────────────────────────────────── */
+:root {
+  --adm-bg:          #0f0f0f;
+  --adm-surface:     #1a1a1a;
+  --adm-surface-2:   #242424;
+  --adm-border:      #2e2e2e;
+  --adm-red:         #AB3636;
+  --adm-red-dark:    #8a2828;
+  --adm-red-glow:    rgba(171, 54, 54, 0.15);
+  --adm-text:        #e8e8e8;
+  --adm-text-muted:  #888;
+  --adm-text-faint:  #555;
+  --adm-mono:        'Courier New', monospace;
+  --adm-radius:      8px;
+  --adm-radius-sm:   4px;
+}
+
+/* ─── Layout ─────────────────────────────────────────────────────────────── */
+
+.adm-root {
+  min-height: 100vh;
+  background: var(--adm-bg);
+  color: var(--adm-text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+}
+
+.adm-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.adm-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ─── Header ─────────────────────────────────────────────────────────────── */
+
+.adm-header {
+  background: var(--adm-surface);
+  border-bottom: 1px solid var(--adm-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.adm-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.adm-header-eyebrow {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--adm-red);
+  margin-bottom: 2px;
+}
+
+.adm-header-h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--adm-text);
+  margin: 0;
+  line-height: 1;
+}
+
+/* ─── Tab bar ────────────────────────────────────────────────────────────── */
+
+.adm-tabbar {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  gap: 0;
+  margin-top: 1rem;
+}
+
+.adm-tab {
+  padding: 0.65rem 1.25rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--adm-text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.adm-tab:hover { color: var(--adm-text); }
+
+.adm-tab--active {
+  color: var(--adm-text);
+  border-bottom-color: var(--adm-red);
+}
+
+/* ─── Stat cards ─────────────────────────────────────────────────────────── */
+
+.adm-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.adm-stat-card {
+  background: var(--adm-surface);
+  border: 1px solid var(--adm-border);
+  border-radius: var(--adm-radius);
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.adm-stat-card--accent {
+  border-color: var(--adm-red);
+  background: var(--adm-red-glow);
+}
+
+.adm-stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--adm-text);
+  line-height: 1;
+}
+
+.adm-stat-card--accent .adm-stat-value { color: #e07070; }
+
+.adm-stat-label {
+  font-size: 12px;
+  color: var(--adm-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ─── Two-col layout ─────────────────────────────────────────────────────── */
+
+.adm-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) { .adm-two-col { grid-template-columns: 1fr; } }
+
+/* ─── Panels ─────────────────────────────────────────────────────────────── */
+
+.adm-panel {
+  background: var(--adm-surface);
+  border: 1px solid var(--adm-border);
+  border-radius: var(--adm-radius);
+  padding: 1.25rem;
+}
+
+.adm-panel-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--adm-text);
+  margin: 0 0 1rem;
+}
+
+.adm-rank-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  counter-reset: rank;
+}
+
+.adm-rank-item {
+  counter-increment: rank;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--adm-surface-2);
+  border-radius: var(--adm-radius-sm);
+}
+
+.adm-rank-item::before {
+  content: counter(rank);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--adm-red);
+  min-width: 16px;
+  text-align: center;
+}
+
+.adm-rank-name { flex: 1; font-weight: 500; }
+
+.adm-rank-count {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--adm-text-muted);
+  background: var(--adm-border);
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+.adm-empty {
+  color: var(--adm-text-faint);
+  font-size: 13px;
+  margin: 0;
+}
+
+/* ─── Toolbar ────────────────────────────────────────────────────────────── */
+
+.adm-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.adm-toolbar-label {
+  font-size: 13px;
+  color: var(--adm-text-muted);
+  margin-right: 0.25rem;
+}
+
+.adm-filter-btn {
+  padding: 0.35rem 0.85rem;
+  border-radius: 99px;
+  border: 1px solid var(--adm-border);
+  background: var(--adm-surface);
+  color: var(--adm-text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.adm-filter-btn:hover { color: var(--adm-text); border-color: #444; }
+
+.adm-filter-btn.active {
+  background: var(--adm-red);
+  border-color: var(--adm-red);
+  color: #fff;
+}
+
+.adm-ml-auto { margin-left: auto; }
+
+/* ─── Table ──────────────────────────────────────────────────────────────── */
+
+.adm-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--adm-border);
+  border-radius: var(--adm-radius);
+  background: var(--adm-surface);
+}
+
+.adm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.adm-table th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--adm-text-muted);
+  border-bottom: 1px solid var(--adm-border);
+  white-space: nowrap;
+}
+
+.adm-table td {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--adm-border);
+  vertical-align: middle;
+  color: var(--adm-text);
+}
+
+.adm-table tbody tr:last-child td { border-bottom: none; }
+
+.adm-table tbody tr:hover td { background: var(--adm-surface-2); }
+
+.adm-td-mono {
+  font-family: var(--adm-mono);
+  font-size: 12px;
+  color: var(--adm-text-muted);
+}
+
+.adm-td-uid {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.adm-td-term {
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ─── Badges ─────────────────────────────────────────────────────────────── */
+
+.adm-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.badge--compare  { background: rgba(171,54,54,0.2); color: #e07070; }
+.badge--view     { background: rgba(54,100,171,0.2); color: #7aaae0; }
+.badge--search   { background: rgba(80,171,54,0.2);  color: #8de070; }
+
+/* ─── Role badge ─────────────────────────────────────────────────────────── */
+
+.adm-role {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--adm-text-muted);
+}
+
+.adm-role--admin { color: var(--adm-red); }
+
+/* ─── Actions ────────────────────────────────────────────────────────────── */
+
+.adm-actions { display: flex; gap: 0.4rem; }
+
+/* ─── Buttons ────────────────────────────────────────────────────────────── */
+
+.adm-btn {
+  padding: 0.5rem 1rem;
+  border-radius: var(--adm-radius-sm);
+  border: 1px solid transparent;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.adm-btn--primary {
+  background: var(--adm-red);
+  color: #fff;
+  border-color: var(--adm-red);
+}
+.adm-btn--primary:hover { background: var(--adm-red-dark); border-color: var(--adm-red-dark); }
+
+.adm-btn--ghost {
+  background: transparent;
+  color: var(--adm-text-muted);
+  border-color: var(--adm-border);
+}
+.adm-btn--ghost:hover { color: var(--adm-text); border-color: #555; }
+.adm-btn--ghost:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.adm-btn--danger { background: transparent; color: #e07070; border-color: #5a2020; }
+.adm-btn--danger:hover { background: rgba(171,54,54,0.15); }
+
+.adm-btn--sm { padding: 0.3rem 0.65rem; font-size: 12px; }
+
+/* ─── Pagination ─────────────────────────────────────────────────────────── */
+
+.adm-pagination {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.adm-page-info { font-size: 13px; color: var(--adm-text-muted); }
+
+/* ─── State messages ─────────────────────────────────────────────────────── */
+
+.adm-state {
+  padding: 2rem;
+  text-align: center;
+  color: var(--adm-text-muted);
+  font-size: 14px;
+  background: var(--adm-surface);
+  border: 1px solid var(--adm-border);
+  border-radius: var(--adm-radius);
+}
+
+.adm-state--error { color: #e07070; border-color: #5a2020; }
+
+/* ─── Gate (access denied / loading) ────────────────────────────────────── */
+
+.adm-gate {
+  min-height: 100vh;
+  background: var(--adm-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.adm-gate-card {
+  background: var(--adm-surface);
+  border: 1px solid var(--adm-border);
+  border-radius: var(--adm-radius);
+  padding: 3rem 2.5rem;
+  text-align: center;
+  max-width: 380px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.adm-gate-card h2 { margin: 0; font-size: 1.25rem; }
+.adm-gate-card p  { margin: 0; color: var(--adm-text-muted); font-size: 14px; }
+
+.adm-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--adm-border);
+  border-top-color: var(--adm-red);
+  border-radius: 50%;
+  animation: adm-spin 0.75s linear infinite;
+}
+
+@keyframes adm-spin { to { transform: rotate(360deg); } }
+
+/* ─── Toast ──────────────────────────────────────────────────────────────── */
+
+.adm-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--adm-radius);
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 9999;
+  animation: adm-fadein 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.adm-toast--success { background: #1a3a1a; color: #7de07d; border: 1px solid #2a5a2a; }
+.adm-toast--error   { background: #3a1a1a; color: #e07070; border: 1px solid #5a2020; }
+
+@keyframes adm-fadein {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
