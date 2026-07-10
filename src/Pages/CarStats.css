@@ -623,7 +623,7 @@
         overflow-x: auto;
         table-layout: fixed;
         width: 100%;
-        -webkit-overflow-scrolling: touch;
+        /*-webkit-overflow-scrolling: touch;*/
     }
 
     .cars-data-table {
