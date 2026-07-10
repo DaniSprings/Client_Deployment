@@ -4,7 +4,6 @@ import { Analytics } from "@vercel/analytics/react";
 import Navbar from './Components/Navbar.jsx';
 import Footer from './Components/Footer.jsx';
 import AdBanner from './Components/AdBanner.jsx';
-import AdminDashboard from './pages/AdminDashboard.jsx';
 import NotFound from './Pages/NotFound.jsx';
 import { Routes, Route } from 'react-router-dom';
 import { useWindowSize } from './hooks/useWindowSize.js';
