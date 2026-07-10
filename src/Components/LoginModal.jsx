@@ -63,9 +63,10 @@ function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
 
         const userId = localStorage.getItem('userId');
         const username = localStorage.getItem('username');
+        const userEmail = localStorage.getItem('userEmail') || username;
 
         if (userId) {
-          onSuccess?.({ userId, username, provider });
+          onSuccess?.({ userId, username, email: userEmail, provider });
         } else {
           const msg = 'Login did not complete. Please try again or sign up.';
           setErrorMsg(msg);
@@ -100,6 +101,7 @@ function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
       onSuccess?.({
         userId: result?.userId,
         username: resolvedUsername,
+        email: result?.email || email,
         provider: 'password',
       });
     } catch (error) {

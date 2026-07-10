@@ -12,6 +12,7 @@ import { useWindowSize } from '../hooks/useWindowSize.js';
 import LoginModal from './LoginModal.jsx';
 import Test1 from '../assets/Test1.svg';
 
+const ADMIN_EMAIL = 'danispringveldt@gmail.com';
 
 const MAX_MODEL_SUGGESTIONS = 12;
 
@@ -75,8 +76,10 @@ function Navbar() {
   const [filter, setFilter] = useState('All');
   const [currentUserId, setCurrentUserId] = useState(null);
   const [currentUserName, setCurrentUserName] = useState('');
+  const [currentUserEmail, setCurrentUserEmail] = useState('');
   const navigate = useNavigate();
   const isLoggedIn = Boolean(currentUserId);
+  const isAdminUser = isLoggedIn && currentUserEmail.toLowerCase() === ADMIN_EMAIL.toLowerCase();
 
   // Search modal and results state
   const [showSearchModal, setShowSearchModal] = useState(false);
@@ -495,6 +498,7 @@ function Navbar() {
     const restoreAuthState = async () => {
       const storedUserId = localStorage.getItem('userId');
       const storedUsername = localStorage.getItem('username');
+      const storedUserEmail = localStorage.getItem('userEmail');
       const authToken = localStorage.getItem('authToken');
 
       if (storedUserId) {
@@ -505,6 +509,12 @@ function Navbar() {
         setCurrentUserName(storedUsername);
       }
 
+      if (storedUserEmail) {
+        setCurrentUserEmail(storedUserEmail);
+      } else if (storedUsername && storedUsername.includes('@')) {
+        setCurrentUserEmail(storedUsername);
+      }
+
       if (!authToken) {
         return;
       }
@@ -513,6 +523,7 @@ function Navbar() {
         const response = await auth.getCurrentUser();
         const profile = response?.data || response || {};
         const resolvedName = resolveDisplayName(profile);
+        const resolvedEmail = String(profile?.email || '').trim();
 
         if (!isMounted) {
           return;
@@ -527,6 +538,11 @@ function Navbar() {
         if (resolvedName) {
           setCurrentUserName(resolvedName);
           localStorage.setItem('username', resolvedName);
+        }
+
+        if (resolvedEmail) {
+          setCurrentUserEmail(resolvedEmail);
+          localStorage.setItem('userEmail', resolvedEmail);
         }
       } catch (error) {
         console.error('Unable to restore auth user from API:', error);
@@ -550,7 +566,9 @@ function Navbar() {
       await auth.logout();
       setCurrentUserId(null);
       setCurrentUserName('');
+      setCurrentUserEmail('');
       localStorage.removeItem('username');
+      localStorage.removeItem('userEmail');
       showSuccess('Logged out successfully');
     } catch (error) {
       console.error('Error logging out:', error);
@@ -641,7 +659,7 @@ function Navbar() {
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
           </button>
-                {isLoggedIn && currentUserName?.toLowerCase().includes('danispringv') && (
+                {isAdminUser && (
                 <Link
                   to="/Admin"
                   className="nav-link"
@@ -686,13 +704,18 @@ function Navbar() {
       {showLoginModal && (
         <LoginModal
           onClose={closeLoginModal}
-          onSuccess={({ userId, username }) => {
+          onSuccess={({ userId, username, email }) => {
             const normalizedUserId = String(userId);
             const resolvedName = username || localStorage.getItem('username') || 'user';
+            const resolvedEmail = String(email || '').trim() || (resolvedName.includes('@') ? resolvedName : '');
             setCurrentUserId(normalizedUserId);
             setCurrentUserName(resolvedName);
+            setCurrentUserEmail(resolvedEmail);
             localStorage.setItem('userId', normalizedUserId);
             localStorage.setItem('username', resolvedName);
+            if (resolvedEmail) {
+              localStorage.setItem('userEmail', resolvedEmail);
+            }
             closeLoginModal();
             showSuccess(`Logged in as ${resolvedName}`);
           }}
