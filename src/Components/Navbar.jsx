@@ -641,6 +641,16 @@ function Navbar() {
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
           </button>
+                {isLoggedIn && currentUserName?.toLowerCase().includes('danispringv') && (
+                <Link
+                  to="/Admin"
+                  className="nav-link"
+                  onClick={() => setMenuOpen(false)}
+                  style={{ color: '#AB3636', fontWeight: 700 }}
+                >
+                  ADMIN
+                </Link>
+              )}
         </div>
       </nav>
       </div>{/* end navbar-inner */}
