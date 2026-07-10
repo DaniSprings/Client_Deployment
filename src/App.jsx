@@ -17,7 +17,7 @@ const Revdistance = lazy(() => import('./Pages/RevDistance.jsx'));
 const Brands = lazy(() => import('./Pages/Brands.jsx'));
 const SearchResults = lazy(() => import('./Pages/SearchResults.jsx'));
 const Login = lazy(() => import('./Pages/Login.jsx'));
-const Admin = lazy(() => import('./Pages/AdminDashboard.jsx'));
+const Admin = lazy(() => import('./Pages/Admin.jsx'));
 
 const PrivacyPolicy = lazy(() => import('./Pages/PrivacyPolicy.jsx'));
 
@@ -36,7 +36,7 @@ function App() {
             <Route path="/CarStats" element={<CarStats />} />
             <Route path="/Results" element={<SearchResults />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/Admin" element={<AdminDashboard />} />
+            <Route path="/Admin" element={<Admin />} />
             <Route path="/RevCalculator" element={<RevCalculator />} />
             <Route path="/Revdistance" element={<Revdistance />} />
             <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
