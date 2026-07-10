@@ -36,10 +36,10 @@ function App() {
             <Route path="/CarStats" element={<CarStats />} />
             <Route path="/Results" element={<SearchResults />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/Admin" element={<AdminDashboard />} />
             <Route path="/RevCalculator" element={<RevCalculator />} />
             <Route path="/Revdistance" element={<Revdistance />} />
             <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
-            <Route path="/Admin" element={<AdminDashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

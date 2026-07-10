@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
 
 const ADMIN_EMAIL = 'danispringveldt@gmail.com';
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE = import.meta.env.VITE_API_URL || 'https://clientapi-production-afc7.up.railway.app';
 
 // ─── API helpers ─────────────────────────────────────────────────────────────
 
