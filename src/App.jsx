@@ -10,6 +10,7 @@ import { useWindowSize } from './hooks/useWindowSize.js';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import Forms from './Components/Forms.jsx';
 
+
 const Home = lazy(() => import('./Pages/Home.jsx'));
 const CarStats = lazy(() => import('./Pages/CarStats.jsx'));
 const RevCalculator = lazy(() => import('./Pages/RevCalculator.jsx'));
