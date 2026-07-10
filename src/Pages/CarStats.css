@@ -621,6 +621,8 @@
         max-height: 70vh;
         overflow-y: auto;
         overflow-x: auto;
+        table-layout: fixed;
+        width: 100%;
         -webkit-overflow-scrolling: touch;
     }
 
