@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './AdminDashboard.css';
+import './Admin.css';
 
 const ADMIN_EMAIL = 'danispringveldt@gmail.com';
 const ADMIN_PASSWORD = 'bmx644gp';
