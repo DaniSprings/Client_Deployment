@@ -18,7 +18,7 @@ const Revdistance = lazy(() => import('./Pages/RevDistance.jsx'));
 const Brands = lazy(() => import('./Pages/Brands.jsx'));
 const SearchResults = lazy(() => import('./Pages/SearchResults.jsx'));
 const Login = lazy(() => import('./Pages/Login.jsx'));
-const Admin = lazy(() => import('./Pages/AdminDashboard.jsx'))
+const Admin = lazy(() => import('./Pages/AdminDashboard.jsx'));
 
 const PrivacyPolicy = lazy(() => import('./Pages/PrivacyPolicy.jsx'));
 
