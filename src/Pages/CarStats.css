@@ -21,8 +21,7 @@
 
 .carstat-container {
     flex: 0 1 calc(16.66% - 8px);
-    /*background-color: #fff;*/
-    background-color: linear-gradient(135deg, #002e5d 0%, #ab3636 100%);
+    background-color: #fff;
     padding: 15px;
     border-radius: 8px;
     border: 1px solid #ddd;
