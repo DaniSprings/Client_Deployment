@@ -11,8 +11,8 @@ function Forms(){
       </h2>
 
       <p className="form-subtitle">
-        Receive weekly deep-dives into automotive engineering
-        breakthroughs and new model releases.
+        Receive weekly deep-dives into popular automotive modals information
+        and new model releases.
       </p>
 
       <form className="form-form">
@@ -20,7 +20,7 @@ function Forms(){
         type="email"
         className="form-input"
         id='EmailSend'
-        placeholder="engineer@industry.com"
+        placeholder="johndoe@email.com"
       />
 
       <button
