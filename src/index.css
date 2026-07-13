@@ -83,7 +83,7 @@
   :root {
     --text: #9ca3af;
     --text-h: #f3f4f6;
-    --bg: #16171d;
+    --bg: linear-gradient(135deg, #002e5d 0%, #ab3636 100%);
     --border: #2e303a;
     --code-bg: #1f2028;
     --accent: #c084fc;
@@ -108,10 +108,20 @@ body,
   padding: 0;
 }
 
+html,
+body {
+  min-height: 100%;
+  background: var(--bg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
 #root {
   width: 100%;
   max-width: 100%;
   margin: 0 auto;
+  background: transparent;
   text-align: center;
   min-height: 100svh;
   display: flex;
