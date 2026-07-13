@@ -360,6 +360,7 @@ a.nav-link {
     overflow-x: hidden;
     overflow-y: visible;
     box-sizing: border-box;
+    background-color: linear-gradient(45deg,#ab3636 100%, #002e5d 0%,);
   }
 
   /* ── Navbar inner row ── */

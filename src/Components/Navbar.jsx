@@ -602,6 +602,7 @@ function Navbar() {
             </span>
           </button>
         </div>
+        
 
       <nav className={`navbar ${menuOpen ? 'menu-open' : ''}`}>
         <div className={`nav-items ${menuOpen ? 'open' : ''}`}>
