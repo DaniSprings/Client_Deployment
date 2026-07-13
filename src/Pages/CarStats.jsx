@@ -316,7 +316,7 @@ function CarStats() {
 
     return (
         <div className="carstat-main-container">
-            <h1>Choose your Cars</h1>
+            <h2>Choose your Cars</h2>
 
             <form onSubmit={handleSubmit}>
                 <div className="carstat-row">

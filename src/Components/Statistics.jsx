@@ -4,7 +4,7 @@ import "./Statistics.css";
 const statsData = [
   {
     label: "ACTIVE MODELS",
-    value: 2742,
+    value: 1527,
     suffix: "",
   },
   {

@@ -8,7 +8,7 @@ function Footer() {
     return (
         <footer className="Footer">
             <div>
-                <h1 style={{ color: '#666' }}>RevReview</h1>
+                <br style={{ color: '#666' }}></br>
             </div>
                 <p>&copy;{getFullYear()} Copyright. All rights reserved.</p>
             <nav>
