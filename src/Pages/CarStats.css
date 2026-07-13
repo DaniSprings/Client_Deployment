@@ -7,7 +7,7 @@
 .carstat-main-container h2 {
     text-align: center;
     margin-bottom: 30px;
-    font-size: 800;
+    font-size: clamp(1.6rem, 2.2vw, 2.8rem);
     font-weight: bold;
 }
 
