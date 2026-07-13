@@ -4,8 +4,8 @@ function AdBanner() {
   return (
     <section className="AdBanner">
       <div className="ad-banner-content">
-        <h2>Buy Smarter with RevReview</h2>
-        <p>Find the best car deals, expert reviews, and trusted ownership insights in one place.</p>
+        <h2><Advertise></Advertise> with RevReview</h2>
+        <p>We can help you find more valuable customers and get more traction, right here! </p>
         <button className="ad-banner-cta">Explore Offers</button>
       </div>
     </section>
