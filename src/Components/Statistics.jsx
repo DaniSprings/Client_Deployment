@@ -4,12 +4,12 @@ import "./Statistics.css";
 const statsData = [
   {
     label: "ACTIVE MODELS",
-    value: 14208,
+    value: 2742,
     suffix: "",
   },
   {
     label: "MANUFACTURERS",
-    value: 142,
+    value: 62,
     suffix: "",
   },
   {
