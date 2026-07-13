@@ -1,5 +1,7 @@
 .GridLayout{
-  background-color: linear-gradient(135deg, #002e5d 0%, #ab3636 100%);  
+  background: transparent;
+  padding: 2rem;
+  min-height: 100vh;  
 }
 
 .brands-wrapper {

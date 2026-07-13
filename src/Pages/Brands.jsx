@@ -6,7 +6,7 @@ import './Brands.css';
 function Brands() {
   return (
     <section className="GridContainer">
-      <main className="GridLayout" style={{ padding: '2rem', background: '#fff' }}>
+      <main className="GridLayout" style={{ padding: '2rem' }}>
         <h1 style={{ marginBottom: 16 }}>Brands</h1>
         <BrandGrid />
       </main>
