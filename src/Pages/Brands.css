@@ -10,6 +10,7 @@
 
 .GridLayout h1{
   font-size: clamp(1.6rem, 2.2vw, 2.8rem);
+  font-weight: bold;
 }
 
 .brands-wrapper {
