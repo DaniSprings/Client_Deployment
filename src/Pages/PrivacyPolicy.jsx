@@ -149,7 +149,7 @@ return (
             <li><strong>With Your consent</strong>: We may disclose Your Personal Data for any other purpose with Your consent.</li>
             </ul>
             <h3>Retention of Your Personal Data</h3>
-            <p>The Company will retain Your Personal Data only for as long as is necessary for the purposes set out in this Privacy Policy. We will retain and use Your Personal Data to the extent necessary to comply with our legal obligations (for example, if We are required to retain Your data to comply with applicable laws), resolve disputes, and enforce our legal agreements and policies.</p>
+            <p>The Company will retain Your Personal Data only for as long as it is necessary for the purposes set out in this Privacy Policy. We will retain and use Your Personal Data to the extent necessary to comply with our legal obligations (for example, if We are required to retain Your data to comply with applicable laws), resolve disputes, and enforce our legal agreements and policies.</p>
             <p>Where possible, We apply shorter retention periods and/or reduce identifiability by deleting, aggregating, or anonymizing data. Unless otherwise stated, the retention periods below are maximum periods (&quot;up to&quot;) and We may delete or anonymize data sooner when it is no longer needed for the relevant purpose. We apply different retention periods to different categories of Personal Data based on the purpose of processing and legal obligations:</p>
             <ul>
             <li>
@@ -177,8 +177,8 @@ return (
             </ul>
             </li>
             </ul>
-            <p>Usage Data is retained in accordance with the retention periods described above, and may be retained longer only where necessary for security, fraud prevention, or legal compliance.</p>
-            <p>We may retain Personal Data beyond the periods stated above for different reasons:</p>
+            <p>Usage Data is retained in accordance with the retention periods described above, and may be retained longer only where necessary for security, fraud prevention, or legal compliance.
+                We may retain Personal Data beyond the periods stated above for different reasons:</p>
             <ul>
             <li>Legal obligation: We are required by law to retain specific data (e.g., financial records for tax authorities).</li>
             <li>Legal claims: Data is necessary to establish, exercise, or defend legal claims.</li>
@@ -220,7 +220,7 @@ return (
             <p>Our Service does not address anyone under the age of 16. We do not knowingly collect personally identifiable information from anyone under the age of 16. If You are a parent or guardian and You are aware that Your child has provided Us with Personal Data, please contact Us. If We become aware that We have collected Personal Data from anyone under the age of 16 without verification of parental consent, We take steps to remove that information from Our servers.</p>
             <p>If We need to rely on consent as a legal basis for processing Your information and Your country requires consent from a parent, We may require Your parent's consent before We collect and use that information.</p>
             <h2>Links to Other Websites</h2>
-            <p>Our Service may contain links to other websites that are not operated by Us. If You click on a third party link, You will be directed to that third party's site. We strongly advise You to review the Privacy Policy of every site You visit.</p>
+            <p>Our Service may contain links to other websites that are not operated by Us. If You click on a third party links, You will be directed to that third party's site. We strongly advise You to review the Privacy Policy of every site You visit.</p>
             <p>We have no control over and assume no responsibility for the content, privacy policies or practices of any third party sites or services.</p>
             <h2>Changes to this Privacy Policy</h2>
             <p>We may update Our Privacy Policy from time to time. We will notify You of any changes by posting the new Privacy Policy on this page.</p>
