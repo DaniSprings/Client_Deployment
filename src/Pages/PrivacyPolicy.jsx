@@ -73,6 +73,8 @@ return (
             <ul className='UserDetail'>
             <li>Email address</li>
             <li>First name and last name</li>
+            <li>Age</li>
+            <li>Occupation</li>
             </ul>
             <h4>Usage Data</h4>
             <p>Usage Data is collected automatically when using the Service.</p>
