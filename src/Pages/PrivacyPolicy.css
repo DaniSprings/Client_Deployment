@@ -8,3 +8,6 @@
 .LegalList, p{
     text-align:left;
 }
+.UserDetail, li {
+    text-align: left;
+}
