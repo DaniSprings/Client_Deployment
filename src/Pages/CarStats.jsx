@@ -576,6 +576,7 @@ function CarStats() {
                                     <h4>Source</h4>
                                     <p className="source-info">Data from Model Table Database</p>
                                 </div>
+                                <p>Please note that these are average values and is considered as consumer information.</p>
                             </div>
                         ))}
                     </div>
