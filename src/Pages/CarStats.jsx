@@ -493,6 +493,63 @@ function CarStats() {
                                     </div>
                                 )}
 
+                                {(details.towingBraked || details.towingUnbraked || details.kerbWeight || details.gvm || details.dryWeight) && (
+                                    <div className="detail-section">
+                                        <h4>Towing & Mass</h4>
+                                        <p><strong>Kerb Weight:</strong> {formatDetailValue(details.kerbWeight, ' kg')}</p>
+                                        <p><strong>Dry Weight (DIN):</strong> {formatDetailValue(details.dryWeight, ' kg')}</p>
+                                        <p><strong>GVM:</strong> {formatDetailValue(details.gvm, ' kg')}</p>
+                                        <p><strong>Payload Capacity:</strong> {formatDetailValue(details.payloadCapacity, ' kg')}</p>
+                                        <p><strong>Load Volume:</strong> {formatDetailValue(details.loadVolume, ' L')}</p>
+                                        <p><strong>Towing (Braked):</strong> {formatDetailValue(details.towingBraked, ' kg')}</p>
+                                        <p><strong>Towing (Unbraked):</strong> {formatDetailValue(details.towingUnbraked, ' kg')}</p>
+                                        <p><strong>Towbar Fitted:</strong> {formatDetailValue(details.towbarFitted)}</p>
+                                        <p><strong>Wading Depth:</strong> {formatDetailValue(details.wadingDepth, ' mm')}</p>
+                                    </div>
+                                )}
+
+                                {(details.airbagQuantity || details.driverAirbag || details.collisionWarning) && (
+                                    <div className="detail-section">
+                                        <h4>Safety</h4>
+                                        <p><strong>Airbags:</strong> {formatDetailValue(details.airbagQuantity)}</p>
+                                        <p><strong>Driver Airbag:</strong> {formatDetailValue(details.driverAirbag)}</p>
+                                        <p><strong>Front Passenger Airbag:</strong> {formatDetailValue(details.frontPassengerAirbag)}</p>
+                                        <p><strong>Front Side Airbags:</strong> {formatDetailValue(details.frontSideAirbags)}</p>
+                                        <p><strong>Rear Side Airbags:</strong> {formatDetailValue(details.rearSideAirbags)}</p>
+                                        <p><strong>Curtain Airbags:</strong> {formatDetailValue(details.curtainAirbags)}</p>
+                                        <p><strong>Driver Knee Airbag:</strong> {formatDetailValue(details.driverKneeAirbag)}</p>
+                                        <p><strong>ISOFIX Mountings:</strong> {formatDetailValue(details.isofixMountings)}</p>
+                                        <p><strong>Collision Warning:</strong> {formatDetailValue(details.collisionWarning)}</p>
+                                    </div>
+                                )}
+
+                                {(details.airConditioning || details.navigation || details.bluetooth) && (
+                                    <div className="detail-section">
+                                        <h4>Features & Extras</h4>
+                                        <p><strong>Air Conditioning:</strong> {formatDetailValue(details.airConditioning)}</p>
+                                        <p><strong>Navigation:</strong> {formatDetailValue(details.navigation)}</p>
+                                        <p><strong>Cruise Control:</strong> {formatDetailValue(details.cruiseControl)}</p>
+                                        <p><strong>Adaptive Cruise Control:</strong> {formatDetailValue(details.adaptiveCruiseControl)}</p>
+                                        <p><strong>Bluetooth:</strong> {formatDetailValue(details.bluetooth)}</p>
+                                        <p><strong>USB Port:</strong> {formatDetailValue(details.usbPort)}</p>
+                                        <p><strong>Leather Upholstery:</strong> {formatDetailValue(details.leatherUpholstery)}</p>
+                                        <p><strong>Electric Driver Seat:</strong> {formatDetailValue(details.electricDriverSeat)}</p>
+                                        <p><strong>Head-Up Display:</strong> {formatDetailValue(details.headUpDisplay)}</p>
+                                        <p><strong>Lane Departure Warning:</strong> {formatDetailValue(details.laneDepartureWarning)}</p>
+                                        <p><strong>Heated Rear Screen:</strong> {formatDetailValue(details.heatedRearScreen)}</p>
+                                    </div>
+                                )}
+
+                                {(details.warrantyYears || details.servicePlanDistance || details.maintenancePlanDistance) && (
+                                    <div className="detail-section">
+                                        <h4>Service & Warranty</h4>
+                                        <p><strong>Warranty:</strong> {formatDetailValue(details.warrantyYears, ' years')} / {formatDetailValue(details.warrantyDistance, ' km')}</p>
+                                        <p><strong>Service Plan:</strong> {formatDetailValue(details.servicePlanYears, ' years')} / {formatDetailValue(details.servicePlanDistance, ' km')}</p>
+                                        <p><strong>Maintenance Plan:</strong> {formatDetailValue(details.maintenancePlanYears, ' years')} / {formatDetailValue(details.maintenancePlanDistance, ' km')}</p>
+                                        <p><strong>Service Interval:</strong> {formatDetailValue(details.serviceIntervalDistance, ' km')}</p>
+                                    </div>
+                                )}
+
                                 <div className="detail-section">
                                     <h4>Source</h4>
                                     <p className="source-info">Data from Model Table Database</p>
