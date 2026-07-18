@@ -474,12 +474,16 @@ function CarStats() {
                                     <h4>Performance</h4>
                                     <p><strong>Top Speed:</strong> {formatDetailValue(details.topSpeed, ' km/h')}</p>
                                     <p><strong>0-100 kph:</strong> {formatDetailValue(details.acceleration, ' s')}</p>
+                                    <p><strong>Steering:</strong> {formatDetailValue(details.steering)}</p>
+                                    <p><strong>Driven Wheels:</strong> {formatDetailValue(details.drivenWheels)}</p>
+                                    <p><strong>Gear Ratios:</strong> {formatDetailValue(details.gearRatios)}</p>
                                 </div>
 
                                 <div className="detail-section">
                                     <h4>Fuel Economy</h4>
                                     <p><strong>Consumption:</strong> {formatDetailValue(details.fuelConsumption, ' L/100km')}</p>
                                     <p><strong>Range:</strong> {formatDetailValue(details.fuelRange, ' Km')}</p>
+                                    <p><strong>Tank Size:</strong> {formatDetailValue(details.tankSize, ' L')}</p>
                                 </div>
 
                                 {(details.length || details.widthExclMirrorsInclMirrors || details.height || details.wheelbase || details.groundClearance) && (
@@ -518,7 +522,9 @@ function CarStats() {
                                         <p><strong>Rear Side Airbags:</strong> {formatDetailValue(details.rearSideAirbags)}</p>
                                         <p><strong>Curtain Airbags:</strong> {formatDetailValue(details.curtainAirbags)}</p>
                                         <p><strong>Driver Knee Airbag:</strong> {formatDetailValue(details.driverKneeAirbag)}</p>
+                                        <p><strong>Passenger Knee Airbag:</strong> {formatDetailValue(details.passengerKneeAirbag)}</p>
                                         <p><strong>ISOFIX Mountings:</strong> {formatDetailValue(details.isofixMountings)}</p>
+                                        <p><strong>Child-Proof Safety Lock:</strong> {formatDetailValue(details.childProofSafetyLock)}</p>
                                         <p><strong>Collision Warning:</strong> {formatDetailValue(details.collisionWarning)}</p>
                                     </div>
                                 )}
@@ -527,16 +533,29 @@ function CarStats() {
                                     <div className="detail-section">
                                         <h4>Features & Extras</h4>
                                         <p><strong>Air Conditioning:</strong> {formatDetailValue(details.airConditioning)}</p>
+                                        <p><strong>Rear Air Conditioning Controls:</strong> {formatDetailValue(details.rearAirConditioningControls)}</p>
                                         <p><strong>Navigation:</strong> {formatDetailValue(details.navigation)}</p>
                                         <p><strong>Cruise Control:</strong> {formatDetailValue(details.cruiseControl)}</p>
                                         <p><strong>Adaptive Cruise Control:</strong> {formatDetailValue(details.adaptiveCruiseControl)}</p>
                                         <p><strong>Bluetooth:</strong> {formatDetailValue(details.bluetooth)}</p>
                                         <p><strong>USB Port:</strong> {formatDetailValue(details.usbPort)}</p>
+                                        <p><strong>Power Steering:</strong> {formatDetailValue(details.powerSteering)}</p>
+                                        <p><strong>Electric Power Steering:</strong> {formatDetailValue(details.electricPowerSteering)}</p>
+                                        <p><strong>Leather Steering Wheel Rim:</strong> {formatDetailValue(details.leatherSteeringWheelRim)}</p>
+                                        <p><strong>Multi-Function Steering Wheel Controls:</strong> {formatDetailValue(details.multiFunctionSteeringWheelControls)}</p>
+                                        <p><strong>Electric Windows:</strong> {formatDetailValue(details.electricWindows)}</p>
                                         <p><strong>Leather Upholstery:</strong> {formatDetailValue(details.leatherUpholstery)}</p>
+                                        <p><strong>Suede-Cloth Upholstery:</strong> {formatDetailValue(details.suedeClothUpholstery)}</p>
+                                        <p><strong>Lumbar Support Adjustment:</strong> {formatDetailValue(details.lumbarSupportAdjustment)}</p>
                                         <p><strong>Electric Driver Seat:</strong> {formatDetailValue(details.electricDriverSeat)}</p>
+                                        <p><strong>Electric Seat Memory:</strong> {formatDetailValue(details.electricSeatMemory)}</p>
+                                        <p><strong>Front Ventilated Seats:</strong> {formatDetailValue(details.frontVentilatedSeats)}</p>
                                         <p><strong>Head-Up Display:</strong> {formatDetailValue(details.headUpDisplay)}</p>
+                                        <p><strong>Controls Screen Input Method:</strong> {formatDetailValue(details.controlsScreenInputMethod)}</p>
+                                        <p><strong>Attention Assist:</strong> {formatDetailValue(details.attentionAssist)}</p>
                                         <p><strong>Lane Departure Warning:</strong> {formatDetailValue(details.laneDepartureWarning)}</p>
                                         <p><strong>Heated Rear Screen:</strong> {formatDetailValue(details.heatedRearScreen)}</p>
+                                        <p><strong>Auto-Dim Exterior Mirrors:</strong> {formatDetailValue(details.autoDimExteriorMirrors)}</p>
                                     </div>
                                 )}
 
@@ -544,9 +563,12 @@ function CarStats() {
                                     <div className="detail-section">
                                         <h4>Service & Warranty</h4>
                                         <p><strong>Warranty:</strong> {formatDetailValue(details.warrantyYears, ' years')} / {formatDetailValue(details.warrantyDistance, ' km')}</p>
+                                        <p><strong>Service/Maintenance Plan:</strong> {formatDetailValue(details.serviceMaintenancePlan)}</p>
                                         <p><strong>Service Plan:</strong> {formatDetailValue(details.servicePlanYears, ' years')} / {formatDetailValue(details.servicePlanDistance, ' km')}</p>
-                                        <p><strong>Maintenance Plan:</strong> {formatDetailValue(details.maintenancePlanYears, ' years')} / {formatDetailValue(details.maintenancePlanDistance, ' km')}</p>
+                                        <p><strong>Maintenance Plan:</strong> {formatDetailValue(details.maintenancePlan)}</p>
+                                        <p><strong>Maintenance Plan Duration:</strong> {formatDetailValue(details.maintenancePlanYears, ' years')} / {formatDetailValue(details.maintenancePlanDistance, ' km')}</p>
                                         <p><strong>Service Interval:</strong> {formatDetailValue(details.serviceIntervalDistance, ' km')}</p>
+                                        <p><strong>Service Interval (Alt):</strong> {formatDetailValue(details.serviceIntervalDistance1, ' km')}</p>
                                     </div>
                                 )}
 
