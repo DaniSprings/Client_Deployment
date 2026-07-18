@@ -137,6 +137,24 @@ export const pricesAPI = {
   },
 };
 
+export const towingAPI = {
+  getAll: async () => {
+    return await fetchAPI("/api/towing");
+  },
+  getById: async (towingId) => {
+    return await fetchAPI(`/api/towing/${towingId}`);
+  }
+};
+
+export const safetyAPI = {
+  getAll: async () => {
+    return await fetchAPI("/api/safety");
+  },
+  getById: async (safetyId) => {
+    return await fetchAPI(`/api/safety/${safetyId}`);
+  }
+};
+
 /**
  * Database Connection Test
  */
@@ -153,6 +171,8 @@ const revReviewDataAPI = {
   dimensions: dimensionsAPI,
   performance: performanceAPI,
   prices: pricesAPI,
+  safety: safetyAPI,
+  towing: towingAPI,
   testConnection,
 };
 
