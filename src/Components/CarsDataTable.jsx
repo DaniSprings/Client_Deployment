@@ -161,7 +161,7 @@ const renderStatus = (car, lookupState, hasDetails) => {
     return <span className="status-incomplete">Incomplete</span>;
 };
 
-function CarsDataTable({ cars, carDetailsData, carLookupStatus }) {
+function CarsDataTable({ cars, carDetailsData, carLookupStatus, comparisonRequested }) {
     const navigate = useNavigate();
     const [isSendingEmail, setIsSendingEmail] = useState(false);
     const [emailStatusMessage, setEmailStatusMessage] = useState('');
@@ -177,6 +177,10 @@ function CarsDataTable({ cars, carDetailsData, carLookupStatus }) {
         .filter((item) => item.details);
 
     const comparisonSummary = useMemo(() => {
+        if (!comparisonRequested) {
+            return { fieldWinners: {}, overallBest: new Set(), overallWorst: new Set(), scoreByCarId: {} };
+        }
+
         const fieldWinners = {};
         const scoreByCarId = {};
 
@@ -243,7 +247,7 @@ function CarsDataTable({ cars, carDetailsData, carLookupStatus }) {
             : new Set(scoredIds.filter((id) => scoreByCarId[id] === worstOverallScore));
 
         return { fieldWinners, overallBest, overallWorst, scoreByCarId };
-    }, [loadedCars]);
+    }, [comparisonRequested, loadedCars]);
 
     const getComparisonClass = (carId, fieldKey) => {
         const fieldResult = comparisonSummary.fieldWinners[fieldKey];
@@ -317,7 +321,7 @@ function CarsDataTable({ cars, carDetailsData, carLookupStatus }) {
     return (
         <div className="cars-data-table-section">
             <h2>Compared Data</h2>
-            {loadedCars.length >= 2 && (
+            {comparisonRequested && loadedCars.length >= 2 && (
                 <p className="comparison-summary-message">
                     Green cells show the best value for that stat, red cells show the least desirable value.
                 </p>
@@ -349,8 +353,8 @@ function CarsDataTable({ cars, carDetailsData, carLookupStatus }) {
                             const lookupState = carLookupStatus[car.id];
 
                             if (details) {
-                                const rowComparisonClass = getRowComparisonClass(car.id);
-                                const overallLabel = getOverallLabel(car.id);
+                                const rowComparisonClass = comparisonRequested ? getRowComparisonClass(car.id) : '';
+                                const overallLabel = comparisonRequested ? getOverallLabel(car.id) : '';
                                 return (
                                     <tr key={car.id} className={`complete ${rowComparisonClass}`.trim()}>
                                         <td data-label="#">{index + 1}</td>
@@ -445,6 +449,11 @@ CarsDataTable.propTypes = {
         status: PropTypes.string,
         message: PropTypes.string,
     })).isRequired,
+    comparisonRequested: PropTypes.bool,
+};
+
+CarsDataTable.defaultProps = {
+    comparisonRequested: false,
 };
 
 export default CarsDataTable;

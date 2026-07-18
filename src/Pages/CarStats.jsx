@@ -67,6 +67,7 @@ function CarStats() {
     const [carDetailsData, setCarDetailsData] = useState({});
     const [carLookupStatus, setCarLookupStatus] = useState({});
     const [fetchingDetails, setFetchingDetails] = useState(false);
+    const [comparisonRequested, setComparisonRequested] = useState(false);
     const [formMessage, setFormMessage] = useState('');
     const [expandedDetails, setExpandedDetails] = useState({});
     const [searchParams] = useSearchParams();
@@ -247,6 +248,7 @@ function CarStats() {
 
     const handleChange = (id, e) => {
         const { name, value } = e.target;
+        setComparisonRequested(false);
         if (name === 'brand') {
             setCarStatsList(prev => prev.map(car => car.id === id ? { ...car, [name]: value, model: '' } : car));
             setModelsList(prev => ({ ...prev, [id]: [] }));
@@ -282,6 +284,7 @@ function CarStats() {
     };
 
     const handleBrandSelect = async (id, brand) => {
+        setComparisonRequested(false);
         setCarStatsList(prev => prev.map(car => car.id === id ? { ...car, brand: brand, model: '' } : car));
         setShowSuggestions(prev => ({ ...prev, [id]: false, [`brand-${id}`]: false }));
         await loadModelsForBrand(id, brand);
@@ -289,12 +292,14 @@ function CarStats() {
     };
 
     const handleModelSelect = (id, model) => {
+        setComparisonRequested(false);
         setCarStatsList(prev => prev.map(car => car.id === id ? { ...car, model: model } : car));
         setShowSuggestions(prev => ({ ...prev, [`model-${id}`]: false }));
         clearCarLookupState(id);
     };
 
     const handleModelSearch = async (id) => {
+        setComparisonRequested(false);
         const currentCar = carStatsList.find(car => car.id === id);
         if (!currentCar?.brand || !currentCar?.model) return;
         await fetchVehicleDetailsForCars([currentCar], { merge: true });
@@ -304,6 +309,7 @@ function CarStats() {
     const handleModelChange = (id, value) => handleChange(id, { target: { name: 'model', value } });
 
     const handleAddCar = () => {
+        setComparisonRequested(false);
         if (carStatsList.length < 6) {
             const newId = Math.max(...carStatsList.map(car => car.id)) + 1;
             setCarStatsList(prev => [...prev, { id: newId, brand: '', model: '' }]);
@@ -311,6 +317,7 @@ function CarStats() {
     };
 
     const handleRemoveCar = (id) => {
+        setComparisonRequested(false);
         if (carStatsList.length > 1) {
             setCarStatsList(prev => prev.filter(car => car.id !== id));
         }
@@ -318,6 +325,7 @@ function CarStats() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setComparisonRequested(true);
         await fetchVehicleDetailsForCars(carStatsList);
     };
 
@@ -450,6 +458,7 @@ function CarStats() {
                 cars={carStatsList}
                 carDetailsData={carDetailsData}
                 carLookupStatus={carLookupStatus}
+                comparisonRequested={comparisonRequested}
             />
 
             {Object.keys(carDetailsData).length > 0 && (
