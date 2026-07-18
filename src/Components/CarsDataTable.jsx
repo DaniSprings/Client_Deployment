@@ -165,10 +165,7 @@ function CarsDataTable({ cars, carDetailsData, carLookupStatus }) {
     const navigate = useNavigate();
     const [isSendingEmail, setIsSendingEmail] = useState(false);
     const [emailStatusMessage, setEmailStatusMessage] = useState('');
-
-    if (!cars.some((car) => car.brand || car.model)) {
-        return null;
-    }
+    const hasCarSelection = cars.some((car) => car.brand || car.model);
 
     const loadedCars = cars
         .map((car) => ({
@@ -281,6 +278,10 @@ function CarsDataTable({ cars, carDetailsData, carLookupStatus }) {
         }
         return '';
     };
+
+    if (!hasCarSelection) {
+        return null;
+    }
 
     const handleSendEmail = async () => {
         const hasAuthToken = Boolean(localStorage.getItem('authToken'));
