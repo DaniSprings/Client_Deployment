@@ -17,6 +17,18 @@ import {
     resolveVehicleDetailsForSelection
 } from '../utils/liveVehicleLookup.js';
 
+const formatDetailValue = (value, suffix = '') => {
+    if (value === null || value === undefined || value === '') {
+        return 'N/A';
+    }
+
+    if (value === 'TBA') {
+        return 'TBA';
+    }
+
+    return `${value}${suffix}`;
+};
+
 function CarStats() {
     const formFields = [
         {
@@ -454,30 +466,30 @@ function CarStats() {
                                     <h4>Engine Specifications</h4>
                                     <p><strong>Type:</strong> {details.engine || 'N/A'}</p>
                                     <p><strong>Cylinders:</strong> {details.cylinders || 'N/A'}</p>
-                                    <p><strong>Power:</strong> {details.power || 'N/A'}</p>
-                                    <p><strong>Torque:</strong> {details.torque || 'N/A'}</p>
+                                    <p><strong>Power:</strong> {formatDetailValue(details.power, ' kW')}</p>
+                                    <p><strong>Torque:</strong> {formatDetailValue(details.torque, ' Nm')}</p>
                                 </div>
 
                                 <div className="detail-section">
                                     <h4>Performance</h4>
-                                    <p><strong>Top Speed:</strong> {details.topSpeed || 'N/A'}</p>
-                                    <p><strong>0-60 kph:</strong> {details.acceleration || 'N/A'}</p>
+                                    <p><strong>Top Speed:</strong> {formatDetailValue(details.topSpeed, ' km/h')}</p>
+                                    <p><strong>0-100 kph:</strong> {formatDetailValue(details.acceleration, ' s')}</p>
                                 </div>
 
                                 <div className="detail-section">
                                     <h4>Fuel Economy</h4>
-                                    <p><strong>Consumption:</strong> {details.fuelConsumption || 'N/A'}</p>
-                                    <p><strong>Range:</strong> {details.fuelRange || 'N/A'}</p>
+                                    <p><strong>Consumption:</strong> {formatDetailValue(details.fuelConsumption, ' L/100km')}</p>
+                                    <p><strong>Range:</strong> {formatDetailValue(details.fuelRange, ' Km')}</p>
                                 </div>
 
                                 {(details.length || details.widthExclMirrorsInclMirrors || details.height || details.wheelbase || details.groundClearance) && (
                                     <div className="detail-section">
                                         <h4>Dimensions</h4>
-                                        <p><strong>Length:</strong> {details.length || 'N/A'}</p>
-                                        <p><strong>Width:</strong> {details.widthExclMirrorsInclMirrors || 'N/A'}</p>
-                                        <p><strong>Height:</strong> {details.height || 'N/A'}</p>
-                                        <p><strong>Wheelbase:</strong> {details.wheelbase || 'N/A'}</p>
-                                        <p><strong>Ground Clearance:</strong> {details.groundClearance || 'N/A'}</p>
+                                        <p><strong>Length:</strong> {formatDetailValue(details.length, ' mm')}</p>
+                                        <p><strong>Width:</strong> {formatDetailValue(details.widthExclMirrorsInclMirrors, ' mm')}</p>
+                                        <p><strong>Height:</strong> {formatDetailValue(details.height, ' mm')}</p>
+                                        <p><strong>Wheelbase:</strong> {formatDetailValue(details.wheelbase, ' mm')}</p>
+                                        <p><strong>Ground Clearance:</strong> {formatDetailValue(details.groundClearance, ' mm')}</p>
                                     </div>
                                 )}
 
