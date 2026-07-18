@@ -107,7 +107,7 @@ api.interceptors.response.use(
     }
 
     // Handle 401 Unauthorized - Clear auth and redirect
-    if (response?.status === 401) {
+    if (response?.status === 401 && !config?.suppressAuthRedirect) {
       localStorage.removeItem("authToken");
       localStorage.removeItem("userId");
       window.location.href = "/login";
@@ -195,6 +195,10 @@ export const get = (url, config = {}) => {
 };
 
 export const post = (url, data, config = {}) => {
+  if (config.skipRetry) {
+    const { skipRetry: _skipRetry, ...requestConfig } = config;
+    return api.post(url, data, requestConfig);
+  }
   return withRetry(() => api.post(url, data, config));
 };
 
@@ -442,7 +446,11 @@ export const auth = {
   socialLogin: (provider, providerId, email, fullName) =>
     post("/api/auth/social-login", { provider, providerId, email, fullName }),
   trackSearch: (userId, searchTerm, filter) =>
-    post("/api/auth/search", { userId, searchTerm, filter }),
+    post(
+      "/api/auth/search",
+      { userId, searchTerm, filter },
+      { skipRetry: true, suppressAuthRedirect: true },
+    ),
   getUserSearches: (userId) => get(`/api/auth/user/${userId}/searches`),
 
   // Send compared car details to the signed-in user's email address.
