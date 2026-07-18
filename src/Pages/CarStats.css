@@ -423,6 +423,48 @@
     background-color: #fff8f0;
 }
 
+.cars-data-table td.comparison-best {
+    background-color: #d9f8e5;
+    color: #176b34;
+    font-weight: 700;
+}
+
+.cars-data-table td.comparison-worst {
+    background-color: #fde0e0;
+    color: #8d1e1e;
+    font-weight: 700;
+}
+
+.cars-data-table tbody tr.comparison-overall-best {
+    box-shadow: inset 4px 0 0 #1f9d55;
+}
+
+.cars-data-table tbody tr.comparison-overall-worst {
+    box-shadow: inset 4px 0 0 #c53030;
+}
+
+.comparison-summary-message {
+    margin: 0 0 14px;
+    color: #3d3d3d;
+    font-size: 0.95rem;
+    text-align: center;
+}
+
+.overall-comparison-note {
+    margin-top: 4px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.comparison-overall-best .overall-comparison-note {
+    color: #176b34;
+}
+
+.comparison-overall-worst .overall-comparison-note {
+    color: #8d1e1e;
+}
+
 .empty-field {
     color: #ccc;
     font-style: italic;
@@ -676,6 +718,14 @@
         color: #333;
         text-align: left;
         flex-shrink: 0;
+    }
+
+    .cars-data-table td.comparison-best {
+        background-color: #d9f8e5;
+    }
+
+    .cars-data-table td.comparison-worst {
+        background-color: #fde0e0;
     }
 
     .cars-data-table-section h2,

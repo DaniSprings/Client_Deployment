@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../services/api';
 
@@ -100,6 +100,43 @@ const formatLength = (dimension) => {
     return `${dimension} mm`;
 };
 
+const COMPARISON_FIELDS = [
+    { key: 'price', preference: 'min' },
+    { key: 'cylinders', preference: 'max' },
+    { key: 'power', preference: 'max' },
+    { key: 'torque', preference: 'max' },
+    { key: 'topSpeed', preference: 'max' },
+    { key: 'acceleration', preference: 'min' },
+    { key: 'fuelConsumption', preference: 'min' },
+    { key: 'fuelRange', preference: 'max' },
+    { key: 'widthExclMirrorsInclMirrors', preference: 'max' },
+    { key: 'length', preference: 'max' },
+];
+
+const toComparableNumber = (value) => {
+    if (value === null || value === undefined) {
+        return null;
+    }
+
+    if (typeof value === 'number') {
+        return Number.isFinite(value) ? value : null;
+    }
+
+    const raw = String(value).trim();
+    if (!raw || raw.toUpperCase() === 'N/A' || raw.toUpperCase() === 'TBA') {
+        return null;
+    }
+
+    const normalized = raw.replace(/,/g, '');
+    const match = normalized.match(/-?\d+(\.\d+)?/);
+    if (!match) {
+        return null;
+    }
+
+    const parsed = Number(match[0]);
+    return Number.isFinite(parsed) ? parsed : null;
+};
+
 const renderStatus = (car, lookupState, hasDetails) => {
     if (hasDetails) {
         return <span className="status-complete">Loaded</span>;
@@ -142,6 +179,109 @@ function CarsDataTable({ cars, carDetailsData, carLookupStatus }) {
         }))
         .filter((item) => item.details);
 
+    const comparisonSummary = useMemo(() => {
+        const fieldWinners = {};
+        const scoreByCarId = {};
+
+        loadedCars.forEach((car) => {
+            scoreByCarId[car.id] = 0;
+        });
+
+        COMPARISON_FIELDS.forEach(({ key, preference }) => {
+            const comparableEntries = loadedCars
+                .map((car) => ({
+                    carId: car.id,
+                    value: toComparableNumber(car.details?.[key]),
+                }))
+                .filter((entry) => entry.value !== null);
+
+            if (comparableEntries.length < 2) {
+                return;
+            }
+
+            const values = comparableEntries.map((entry) => entry.value);
+            const bestValue = preference === 'min' ? Math.min(...values) : Math.max(...values);
+            const worstValue = preference === 'min' ? Math.max(...values) : Math.min(...values);
+
+            if (bestValue === worstValue) {
+                return;
+            }
+
+            const best = new Set(
+                comparableEntries
+                    .filter((entry) => entry.value === bestValue)
+                    .map((entry) => entry.carId),
+            );
+            const worst = new Set(
+                comparableEntries
+                    .filter((entry) => entry.value === worstValue)
+                    .map((entry) => entry.carId),
+            );
+
+            fieldWinners[key] = { best, worst };
+
+            best.forEach((carId) => {
+                scoreByCarId[carId] = (scoreByCarId[carId] ?? 0) + 1;
+            });
+            worst.forEach((carId) => {
+                scoreByCarId[carId] = (scoreByCarId[carId] ?? 0) - 1;
+            });
+        });
+
+        const scoredIds = Object.keys(scoreByCarId).map((id) => Number(id));
+        if (scoredIds.length < 2) {
+            return { fieldWinners, overallBest: new Set(), overallWorst: new Set(), scoreByCarId };
+        }
+
+        const allScores = scoredIds.map((id) => scoreByCarId[id] ?? 0);
+        const bestOverallScore = Math.max(...allScores);
+        const worstOverallScore = Math.min(...allScores);
+
+        const overallBest = bestOverallScore === worstOverallScore
+            ? new Set()
+            : new Set(scoredIds.filter((id) => scoreByCarId[id] === bestOverallScore));
+
+        const overallWorst = bestOverallScore === worstOverallScore
+            ? new Set()
+            : new Set(scoredIds.filter((id) => scoreByCarId[id] === worstOverallScore));
+
+        return { fieldWinners, overallBest, overallWorst, scoreByCarId };
+    }, [loadedCars]);
+
+    const getComparisonClass = (carId, fieldKey) => {
+        const fieldResult = comparisonSummary.fieldWinners[fieldKey];
+        if (!fieldResult) {
+            return '';
+        }
+        if (fieldResult.best.has(carId)) {
+            return 'comparison-best';
+        }
+        if (fieldResult.worst.has(carId)) {
+            return 'comparison-worst';
+        }
+        return '';
+    };
+
+    const getRowComparisonClass = (carId) => {
+        if (comparisonSummary.overallBest.has(carId)) {
+            return 'comparison-overall-best';
+        }
+        if (comparisonSummary.overallWorst.has(carId)) {
+            return 'comparison-overall-worst';
+        }
+        return '';
+    };
+
+    const getOverallLabel = (carId) => {
+        if (comparisonSummary.overallBest.has(carId)) {
+            return 'Best Overall Value';
+        }
+        if (comparisonSummary.overallWorst.has(carId)) {
+            return 'Least Desirable Overall';
+        }
+        return '';
+    };
+
     const handleSendEmail = async () => {
         const hasAuthToken = Boolean(localStorage.getItem('authToken'));
         const hasUserId = Boolean(localStorage.getItem('userId'));
@@ -176,6 +316,11 @@ function CarsDataTable({ cars, carDetailsData, carLookupStatus }) {
     return (
         <div className="cars-data-table-section">
             <h2>Compared Data</h2>
+            {loadedCars.length >= 2 && (
+                <p className="comparison-summary-message">
+                    Green cells show the best value for that stat, red cells show the least desirable value.
+                </p>
+            )}
             <div className="table-wrapper">
                 <table className="cars-data-table">
                     <thead>
@@ -203,24 +348,27 @@ function CarsDataTable({ cars, carDetailsData, carLookupStatus }) {
                             const lookupState = carLookupStatus[car.id];
 
                             if (details) {
+                                const rowComparisonClass = getRowComparisonClass(car.id);
+                                const overallLabel = getOverallLabel(car.id);
                                 return (
-                                    <tr key={car.id} className="complete">
+                                    <tr key={car.id} className={`complete ${rowComparisonClass}`.trim()}>
                                         <td data-label="#">{index + 1}</td>
                                         <td data-label="Brand">{details.brand}</td>
                                         <td data-label="Model">{details.model}</td>
-                                        <td data-label="Price"><span className="price-cell">{formatPrice(details.price)}</span></td>
+                                        <td data-label="Price" className={getComparisonClass(car.id, 'price')}><span className="price-cell">{formatPrice(details.price)}</span></td>
                                         <td data-label="Engine">{details.engine || 'N/A'}</td>
-                                        <td data-label="Cylinders">{details.cylinders || 'N/A'}</td>
-                                        <td data-label="Power">{formatPower(details.power)}</td>
-                                        <td data-label="Torque">{formatTorque(details.torque)}</td>
-                                        <td data-label="Top Speed">{formatTopSpeed(details.topSpeed)}</td>
-                                        <td data-label="0-60 km/h">{formatAcceleration(details.acceleration)}</td>
-                                        <td data-label="Fuel Consumption">{formatFuelConsumption(details.fuelConsumption)}</td>
-                                        <td data-label="Fuel Range">{formatFuelRange(details.fuelRange)}</td>
-                                        <td data-label="Width">{formatWidth(details.widthExclMirrorsInclMirrors)}</td>
-                                        <td data-label="Length">{formatLength(details.length)}</td>
+                                        <td data-label="Cylinders" className={getComparisonClass(car.id, 'cylinders')}>{details.cylinders || 'N/A'}</td>
+                                        <td data-label="Power" className={getComparisonClass(car.id, 'power')}>{formatPower(details.power)}</td>
+                                        <td data-label="Torque" className={getComparisonClass(car.id, 'torque')}>{formatTorque(details.torque)}</td>
+                                        <td data-label="Top Speed" className={getComparisonClass(car.id, 'topSpeed')}>{formatTopSpeed(details.topSpeed)}</td>
+                                        <td data-label="0-60 km/h" className={getComparisonClass(car.id, 'acceleration')}>{formatAcceleration(details.acceleration)}</td>
+                                        <td data-label="Fuel Consumption" className={getComparisonClass(car.id, 'fuelConsumption')}>{formatFuelConsumption(details.fuelConsumption)}</td>
+                                        <td data-label="Fuel Range" className={getComparisonClass(car.id, 'fuelRange')}>{formatFuelRange(details.fuelRange)}</td>
+                                        <td data-label="Width" className={getComparisonClass(car.id, 'widthExclMirrorsInclMirrors')}>{formatWidth(details.widthExclMirrorsInclMirrors)}</td>
+                                        <td data-label="Length" className={getComparisonClass(car.id, 'length')}>{formatLength(details.length)}</td>
                                         <td data-label="Status">
                                             {renderStatus(car, lookupState, true)}
+                                            {overallLabel && <div className="overall-comparison-note">{overallLabel}</div>}
                                             {lookupState?.message && <div>{lookupState.message}</div>}
                                         </td>
                                     </tr>
