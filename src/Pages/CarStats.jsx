@@ -461,7 +461,7 @@ function CarStats() {
                                 <div className="detail-section">
                                     <h4>Performance</h4>
                                     <p><strong>Top Speed:</strong> {details.topSpeed || 'N/A'}</p>
-                                    <p><strong>0-60 mph:</strong> {details.acceleration || 'N/A'}</p>
+                                    <p><strong>0-60 kph:</strong> {details.acceleration || 'N/A'}</p>
                                 </div>
 
                                 <div className="detail-section">
