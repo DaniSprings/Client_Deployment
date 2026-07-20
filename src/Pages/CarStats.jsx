@@ -342,7 +342,7 @@ function CarStats() {
     return (
         <div className="carstat-main-container">
             <h2>CHOOSE YOUR CARS</h2>
-            <p>Please see your selection of Vehicles you have compared</p>
+            <p>Please see your selection of vehicles you have compared</p>
 
             <form onSubmit={handleSubmit}>
                 <div className="carstat-row">
