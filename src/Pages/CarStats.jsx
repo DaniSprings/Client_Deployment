@@ -501,8 +501,8 @@ function CarStats() {
                                     <div className="detail-section">
                                         <h4>Dimensions</h4>
                                         <p><strong>Length:</strong> {formatDetailValue(details.length, ' mm')}</p>
-                                        <p><strong>Width:</strong> {formatDetailValue(details.widthExclMirrors, ' mm')}</p>
-                                        <p><strong>Width:</strong> {formatDetailValue(details.widthInclMirrors, ' mm')}</p>
+                                        <p><strong>WidthExcludeMirrors:</strong> {formatDetailValue(details.widthExclMirrors, ' mm')}</p>
+                                        <p><strong>WidthIncludeMirrors:</strong> {formatDetailValue(details.widthInclMirrors, ' mm')}</p>
                                         <p><strong>Height:</strong> {formatDetailValue(details.height, ' mm')}</p>
                                         <p><strong>Wheelbase:</strong> {formatDetailValue(details.wheelbase, ' mm')}</p>
                                         <p><strong>Ground Clearance:</strong> {formatDetailValue(details.groundClearance, ' mm')}</p>
