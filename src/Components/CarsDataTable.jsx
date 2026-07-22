@@ -342,7 +342,8 @@ function CarsDataTable({ cars, carDetailsData, carLookupStatus, comparisonReques
                             <th>0-60 km/h</th>
                             <th>Fuel Consumption</th>
                             <th>Fuel Range</th>
-                            <th>Width (excl. mirrors / incl. mirrors)</th>
+                            <th>Width (excl. mirrors)</th>
+                            <th>Width (incl. mirrors)</th>
                             <th>Length</th>
                             <th>Status</th>
                         </tr>
