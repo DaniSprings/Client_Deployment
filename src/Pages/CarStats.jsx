@@ -497,11 +497,12 @@ function CarStats() {
                                     <p><strong>Range:</strong> {formatDetailValue(details.fuelRange, ' Km')}</p>
                                 </div>
 
-                                {(details.length || details.widthExclMirrorsInclMirrors || details.height || details.wheelbase || details.groundClearance) && (
+                                {(details.length || details.widthExclMirrors || details.widthInclMirrors || details.height || details.wheelbase || details.groundClearance) && (
                                     <div className="detail-section">
                                         <h4>Dimensions</h4>
                                         <p><strong>Length:</strong> {formatDetailValue(details.length, ' mm')}</p>
-                                        <p><strong>Width:</strong> {formatDetailValue(details.widthExclMirrorsInclMirrors, ' mm')}</p>
+                                        <p><strong>Width:</strong> {formatDetailValue(details.widthExclMirrors, ' mm')}</p>
+                                        <p><strong>Width:</strong> {formatDetailValue(details.widthInclMirrors, ' mm')}</p>
                                         <p><strong>Height:</strong> {formatDetailValue(details.height, ' mm')}</p>
                                         <p><strong>Wheelbase:</strong> {formatDetailValue(details.wheelbase, ' mm')}</p>
                                         <p><strong>Ground Clearance:</strong> {formatDetailValue(details.groundClearance, ' mm')}</p>
