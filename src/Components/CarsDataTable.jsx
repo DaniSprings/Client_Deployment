@@ -442,7 +442,8 @@ CarsDataTable.propTypes = {
         acceleration: PropTypes.string,
         fuelConsumption: PropTypes.string,
         fuelRange: PropTypes.string,
-        widthExclMirrorsInclMirrors: PropTypes.string,
+        widthExclMirrors: PropTypes.string,
+        widthInclMirrors: PropTypes.string,
         length: PropTypes.string,
     })).isRequired,
     carLookupStatus: PropTypes.objectOf(PropTypes.shape({
