@@ -370,6 +370,7 @@ function CarsDataTable({ cars, carDetailsData, carLookupStatus, comparisonReques
                                         <td data-label="Fuel Consumption" className={getComparisonClass(car.id, 'fuelConsumption')}>{formatFuelConsumption(details.fuelConsumption)}</td>
                                         <td data-label="Fuel Range" className={getComparisonClass(car.id, 'fuelRange')}>{formatFuelRange(details.fuelRange)}</td>
                                         <td data-label="Width" className={getComparisonClass(car.id, 'widthExclMirrorsInclMirrors')}>{formatWidth(details.widthExclMirrorsInclMirrors)}</td>
+                                        <td data-label="Width" className={getComparisonClass(car.id, 'widthExclMirrorsInclMirrors')}>{formatWidth(details.widthExclMirrorsInclMirrors)}</td>
                                         <td data-label="Length" className={getComparisonClass(car.id, 'length')}>{formatLength(details.length)}</td>
                                         <td data-label="Status">
                                             {renderStatus(car, lookupState, true)}
