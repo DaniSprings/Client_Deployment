@@ -519,7 +519,7 @@ function CarStats() {
                                         <p><strong>Load Volume:</strong> {formatDetailValue(details.loadVolume, ' L')}</p>
                                         <p><strong>Towing (Braked):</strong> {formatDetailValue(details.towingBraked, ' kg')}</p>
                                         <p><strong>Towing (Unbraked):</strong> {formatDetailValue(details.towingUnbraked, ' kg')}</p>
-                                        <p><strong>Towbar Fitted:</strong> {formatDetailValue(details.towbarFitted)}</p>
+                                        <p><strong>Towbar:</strong> {formatDetailValue(details.towbar)}</p>
                                         <p><strong>Wading Depth:</strong> {formatDetailValue(details.wadingDepth, ' mm')}</p>
                                     </div>
                                 )}

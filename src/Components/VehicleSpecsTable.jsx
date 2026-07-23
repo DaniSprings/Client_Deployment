@@ -286,8 +286,8 @@ VehicleSpecsTable.propTypes = {
             loadVolume: PropTypes.string,
             dryWeight: PropTypes.string,
             payloadCapacity: PropTypes.string,
-            towbarFitted: PropTypes.string,
-            wadingDepth: PropTypes.string,
+            towbar: PropTypes.string,
+            waterdepth: PropTypes.string,
             // Safety
             airbagQuantity: PropTypes.string,
             driverAirbag: PropTypes.string,
