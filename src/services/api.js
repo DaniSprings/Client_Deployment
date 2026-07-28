@@ -19,7 +19,7 @@ export const API_BASE = normalizeApiBase(
   "https://clientapi-production-afc7.up.railway.app",
 );
 
-const FALLBACK_API_BASE = "http://localhost:4000"; // Fallback to local development server if primary API is unreachable
+const FALLBACK_API_BASE = "http://localhost4000 "; // Fallback to local development server if primary API is unreachable
 const isFallbackEnabled = API_BASE !== FALLBACK_API_BASE;
 
 const isPrimaryUnreachable = (error) => {
