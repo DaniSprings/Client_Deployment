@@ -524,15 +524,7 @@ function CarStats() {
                                     </div>
                                 )}
 
-                                {/*{(details.airbagQuantity || details.driverAirbag || details.collisionWarning) && (
-                                    <div className="detail-section">
-                                        <h4>Safety</h4>
-                                        <p><strong>Airbags:</strong> {formatDetailValue(details.airbagQuantity)}</p>
-                                        <p><strong>Child-Proof Safety Lock:</strong> {formatDetailValue(details.childProofSafetyLock)}</p>
-                                        <p><strong>ISOFIX Mountings:</strong> {formatDetailValue(details.isofixMountings)}</p>
-                                        <p><strong>Collision Warning:</strong> {formatDetailValue(details.collisionWarning)}</p>
-                                    </div>
-                                )}*/}
+                                
 
                                 {(details.airConditioning || details.navigation || details.bluetooth) && (
                                     <div className="detail-section">
