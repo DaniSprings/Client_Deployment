@@ -307,7 +307,7 @@ function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
           By signing in you agree to our{' '}
           <a href="/terms" target="_blank" rel="noopener noreferrer">Terms of Service</a>
           {' '}and{' '}
-          <a href="PrivacyPolicy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.
+          <a href="/PrivacyPolicy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.
         </p>
       </div>
     </div>
