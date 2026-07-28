@@ -543,15 +543,7 @@ function CarStats() {
                                     </div>
                                 )}
 
-                                {(details.warrantyYears || details.servicePlanDistance || details.maintenancePlanDistance) && (
-                                    <div className="detail-section">
-                                        <h4>Service & Warranty</h4>
-                                        <p><strong>Warranty:</strong> {formatDetailValue(details.warrantyYears, ' years')} / {formatDetailValue(details.warrantyDistance, ' km')}</p>
-                                        <p><strong>Service Plan:</strong> {formatDetailValue(details.servicePlanYears, ' years')} / {formatDetailValue(details.servicePlanDistance, ' km')}</p>
-                                        <p><strong>Maintenance Plan:</strong> {formatDetailValue(details.maintenancePlanYears, ' years')} / {formatDetailValue(details.maintenancePlanDistance, ' km')}</p>
-                                        <p><strong>Service Interval:</strong> {formatDetailValue(details.serviceIntervalDistance, ' km')}</p>
-                                    </div>
-                                )}
+                                
 
                                 <div className="detail-section more-info-toggle">
                                     <button
