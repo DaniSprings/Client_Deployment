@@ -501,8 +501,8 @@ function CarStats() {
                                     <div className="detail-section">
                                         <h4>Dimensions</h4>
                                         <p><strong>Length:</strong> {formatDetailValue(details.length, ' mm')}</p>
-                                        <p><strong>WidthExcludeMirrors:</strong> {formatDetailValue(details.widthExclMirrors, ' mm')}</p>
-                                        <p><strong>WidthIncludeMirrors:</strong> {formatDetailValue(details.widthInclMirrors, ' mm')}</p>
+                                        <p><strong>Width Excluding Mirrors:</strong> {formatDetailValue(details.widthExclMirrors, ' mm')}</p>
+                                        <p><strong>Width Including Mirrors:</strong> {formatDetailValue(details.widthInclMirrors, ' mm')}</p>
                                         <p><strong>Height:</strong> {formatDetailValue(details.height, ' mm')}</p>
                                         <p><strong>Wheelbase:</strong> {formatDetailValue(details.wheelbase, ' mm')}</p>
                                         <p><strong>Ground Clearance:</strong> {formatDetailValue(details.groundClearance, ' mm')}</p>
@@ -512,14 +512,14 @@ function CarStats() {
                                 {(details.towingBraked || details.towingUnbraked || details.kerbWeight || details.gvm || details.dryWeight) && (
                                     <div className="detail-section">
                                         <h4>Towing & Mass</h4>
-                                        <p><strong>Kerb Weight:</strong> {formatDetailValue(details.kerbWeight, ' kg')}</p>
+                                        <p><strong>Kerb Weight (EU):</strong> {formatDetailValue(details.kerbWeight, ' kg')}</p>
                                         <p><strong>Dry Weight (DIN):</strong> {formatDetailValue(details.dryWeight, ' kg')}</p>
                                         <p><strong>GVM:</strong> {formatDetailValue(details.gvm, ' kg')}</p>
                                         <p><strong>Payload Capacity:</strong> {formatDetailValue(details.payloadCapacity, ' kg')}</p>
                                         <p><strong>Load Volume:</strong> {formatDetailValue(details.loadVolume, ' L')}</p>
                                         <p><strong>Towing (Braked):</strong> {formatDetailValue(details.towingBraked, ' kg')}</p>
                                         <p><strong>Towing (Unbraked):</strong> {formatDetailValue(details.towingUnbraked, ' kg')}</p>
-                                        <p><strong>Towbar:</strong> {formatDetailValue(details.towbar)}</p>
+                                        <p><strong>Towbar:</strong> {formatDetailValue(details.towbarFitted)}</p>
                                         <p><strong>Wading Depth:</strong> {formatDetailValue(details.wadingDepth, ' mm')}</p>
                                     </div>
                                 )}
