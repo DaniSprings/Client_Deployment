@@ -126,26 +126,18 @@ export const getLookupModelOptions = (brandName, liveModels = []) => {
 };
 
 export const mapVehicleDetails = (vehicleData, fallbackCar = {}) => ({
+  // Spread first so every field the API returns (tankSize, steering,
+  // drivenWheels, towing/mass, safety, extras, service & warranty, etc.)
+  // reaches the UI. Only the fields below need fallback/derived handling.
+  ...vehicleData,
   id: vehicleData?.id ?? fallbackCar.id,
   brand: vehicleData?.brand || fallbackCar.brand || "",
   model: vehicleData?.model || fallbackCar.model || "",
   price: vehicleData?.price ?? null,
   priceStatus: vehicleData?.priceStatus || "",
   priceExclEmissionsTax: vehicleData?.priceExclEmissionsTax ?? null,
-  engine: vehicleData?.engine || "",
-  cylinders: vehicleData?.cylinders || "",
-  power: vehicleData?.power || "",
-  torque: vehicleData?.torque || "",
-  topSpeed: vehicleData?.topSpeed || "",
-  acceleration: vehicleData?.acceleration || "",
-  fuelConsumption: vehicleData?.fuelConsumption || "",
-  fuelRange: vehicleData?.fuelRange || "",
-  length: vehicleData?.length || "",
   widthExclMirrorsInclMirrors:
     vehicleData?.widthExclMirrorsInclMirrors || vehicleData?.width || "",
-  height: vehicleData?.height || "",
-  wheelbase: vehicleData?.wheelbase || "",
-  groundClearance: vehicleData?.groundClearance || "",
 });
 
 export const resolveVehicleDetailsForSelection = async ({
