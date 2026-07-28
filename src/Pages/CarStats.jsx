@@ -543,8 +543,6 @@ function CarStats() {
                                     </div>
                                 )}
 
-                                
-
                                 <div className="detail-section more-info-toggle">
                                     <button
                                         type="button"
@@ -557,6 +555,19 @@ function CarStats() {
 
                                 {expandedDetails[carId] && (
                                     <>
+                                        {(details.warrantyYears || details.servicePlanDistance || details.maintenancePlanDistance) && (
+                                            <div className="detail-section">
+                                                <h4>Service & Warranty</h4>
+                                                <p><strong>Warranty:</strong> {formatDetailValue(details.warrantyYears, ' years')} / {formatDetailValue(details.warrantyDistance, ' km')}</p>
+                                                <p><strong>Service Plan:</strong> {formatDetailValue(details.servicePlanYears, ' years')} / {formatDetailValue(details.servicePlanDistance, ' km')}</p>
+                                                <p><strong>Maintenance Plan:</strong> {formatDetailValue(details.maintenancePlanYears, ' years')} / {formatDetailValue(details.maintenancePlanDistance, ' km')}</p>
+                                                <p><strong>Service Interval:</strong> {formatDetailValue(details.serviceIntervalDistance, ' km')}</p>
+                                                <p><strong>Service/Maintenance Plan:</strong> {formatDetailValue(details.serviceMaintenancePlan)}</p>
+                                                <p><strong>Maintenance Plan (Alt):</strong> {formatDetailValue(details.maintenancePlan)}</p>
+                                                <p><strong>Service Interval (Alt):</strong> {formatDetailValue(details.serviceIntervalDistance1, ' km')}</p>
+                                            </div>
+                                        )}
+
                                         <div className="detail-section">
                                             <h4>Additional Performance</h4>
                                             <p><strong>Steering:</strong> {formatDetailValue(details.steering)}</p>
@@ -603,18 +614,6 @@ function CarStats() {
                                             <p><strong>Lane Departure Warning:</strong> {formatDetailValue(details.laneDepartureWarning)}</p>
                                             <p><strong>Heated Rear Screen:</strong> {formatDetailValue(details.heatedRearScreen)}</p>
                                         </div>
-                                        {(details.warrantyYears || details.servicePlanDistance || details.maintenancePlanDistance) && (
-                                            <div className="detail-section">
-                                                <h4>Service & Warranty</h4>
-                                                <p><strong>Warranty:</strong> {formatDetailValue(details.warrantyYears, ' years')} / {formatDetailValue(details.warrantyDistance, ' km')}</p>
-                                                <p><strong>Service Plan:</strong> {formatDetailValue(details.servicePlanYears, ' years')} / {formatDetailValue(details.servicePlanDistance, ' km')}</p>
-                                                <p><strong>Maintenance Plan:</strong> {formatDetailValue(details.maintenancePlanYears, ' years')} / {formatDetailValue(details.maintenancePlanDistance, ' km')}</p>
-                                                <p><strong>Service Interval:</strong> {formatDetailValue(details.serviceIntervalDistance, ' km')}</p>
-                                                <p><strong>Service/Maintenance Plan:</strong> {formatDetailValue(details.serviceMaintenancePlan)}</p>
-                                                <p><strong>Maintenance Plan:</strong> {formatDetailValue(details.maintenancePlan)}</p>
-                                                <p><strong>Service Interval (Alt):</strong> {formatDetailValue(details.serviceIntervalDistance1, ' km')}</p>
-                                            </div>
-                                        )}
                                     </>
                                 )}
 
