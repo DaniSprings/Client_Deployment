@@ -317,6 +317,29 @@ const authApi = {
   },
 
   /**
+   * Google OAuth 2.0 — ID token flow (popup/one-tap credential)
+   * @param {string} credential - The Google ID token (JWT) from @react-oauth/google
+   * @returns {Promise<Object>} Authentication response
+   */
+  googleIdToken: async (credential) => {
+    try {
+      const response = await authAxios.post("/social-login", {
+        provider: "google",
+        credential,
+      });
+
+      if (response.data.token) {
+        localStorage.setItem("authToken", response.data.token);
+        localStorage.setItem("userId", response.data.userId);
+      }
+
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error || { message: "Google login failed" };
+    }
+  },
+
+  /**
    * Logout user
    * @returns {Promise<Object>} Logout response
    */
