@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-/*import { useGoogleLogin } from '@react-oauth/google';*/
+import { useGoogleLogin } from '@react-oauth/google';
 import { API_BASE } from '../services/api.js';
 import authApi from '../services/authApi.js';
 import './LoginModal.css';
@@ -33,6 +33,50 @@ function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
     const firstFocusable = backdropRef.current?.querySelector('button, [href], input, [tabindex]:not([tabindex="-1"])');
     firstFocusable?.focus();
   }, []);
+
+  // Real Google Sign-In: implicit-flow access token → Google userinfo →
+  // existing /api/auth/social-login endpoint (no ID-token verification needed
+  // since the access token itself was already validated by Google).
+  const handleGoogleLogin = useGoogleLogin({
+    flow: 'implicit',
+    onSuccess: async (tokenResponse) => {
+      setErrorMsg('');
+      setIsLoading('google');
+      try {
+        const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        });
+
+        if (!userInfoRes.ok) {
+          throw new Error('Failed to fetch Google profile.');
+        }
+
+        const profile = await userInfoRes.json();
+        const result = await authApi.socialLogin('google', profile.sub, profile.email, profile.name || profile.email);
+        const resolvedUsername = result?.username || result?.email || profile.email;
+
+        localStorage.setItem('username', resolvedUsername);
+        onSuccess?.({
+          userId: result?.userId,
+          username: resolvedUsername,
+          email: result?.email || profile.email,
+          provider: 'google',
+        });
+      } catch (error) {
+        const msg = error?.message || 'Google login failed. Please try again.';
+        setErrorMsg(msg);
+        onFailure?.(msg);
+      } finally {
+        setIsLoading(null);
+      }
+    },
+    onError: () => {
+      const msg = 'Google login was cancelled or failed.';
+      setErrorMsg(msg);
+      onFailure?.(msg);
+      setIsLoading(null);
+    },
+  });
 
   const handleSocialLogin = (provider) => {
     setErrorMsg('');
@@ -243,7 +287,7 @@ function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
           <button
             type="button"
             className="lm-btn lm-btn--google"
-            onClick={() => handleSocialLogin('google')}
+            onClick={() => handleGoogleLogin()}
             disabled={!!isLoading}
             aria-busy={isLoading === 'google'}
           >
