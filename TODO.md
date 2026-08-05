@@ -48,9 +48,12 @@ The deployed `LoginModal` does **not** use real Google OAuth at all:
       `ClientAPI` (`socialAuth.routes.js`) so they short-circuit with an
       error whenever `isProduction` is true, regardless of
       `ALLOW_DEV_SOCIAL_LOGIN`.
-- [ ] Same problem applies to "Continue with Facebook" — still uses the
-      dev-stub popup flow (now guarded off in production); needs a real
-      Facebook OAuth flow chosen and wired up the same way.
+- [x] Same problem applies to "Continue with Facebook" — real Facebook Login
+      now wired up in `LoginModal.jsx` via the Facebook JS SDK
+      (`src/utils/facebookSdk.js`): `FB.login()` → `FB.api('/me', ...,
+      {fields:'id,name,email'})` → existing `authApi.socialLogin('facebook',
+      ...)` → `POST /api/auth/social-login` (no backend changes needed, same
+      as the Google flow). Requires `VITE_FACEBOOK_APP_ID` (added to `.env`).
 - [ ] After the fix, re-test on the live deployment (or a preview deploy)
       by actually completing the Google consent screen, not just simulating
       the click. Also set `VITE_GOOGLE_CLIENT_ID` on the Vercel project and

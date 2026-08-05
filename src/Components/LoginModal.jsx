@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useGoogleLogin } from '@react-oauth/google';
-import { API_BASE } from '../services/api.js';
 import authApi from '../services/authApi.js';
+import { loadFacebookSdk } from '../utils/facebookSdk.js';
 import './LoginModal.css';
+
+const FACEBOOK_APP_ID = import.meta.env.VITE_FACEBOOK_APP_ID;
 
 function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
   const LOGIN_EMAIL_KEY = 'rememberedLoginEmail';
@@ -78,47 +80,60 @@ function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
     },
   });
 
-  const handleSocialLogin = (provider) => {
+  // Real Facebook Login: JS SDK login popup → FB Graph /me → existing
+  // /api/auth/social-login endpoint (mirrors the Google implicit-flow pattern).
+  const handleFacebookLogin = async () => {
     setErrorMsg('');
-    setIsLoading(provider);
+    setIsLoading('facebook');
 
-    const base = API_BASE || '';
-    const url = `${base}/auth/${provider}`;
-    const w = 600;
-    const h = 700;
-    const left = window.screenX + (window.outerWidth - w) / 2;
-    const top = window.screenY + (window.outerHeight - h) / 2.5;
-
-    const popup = window.open(
-      url,
-      `${provider}-auth`,
-      `width=${w},height=${h},left=${left},top=${top},resizable,scrollbars`
-    );
-
-    if (!popup) {
-      setErrorMsg('Popup was blocked. Please allow popups for this site.');
-      setIsLoading(null);
-      return;
-    }
-
-    const pollInterval = setInterval(() => {
-      if (popup.closed) {
-        clearInterval(pollInterval);
-        setIsLoading(null);
-
-        const userId = localStorage.getItem('userId');
-        const username = localStorage.getItem('username');
-        const userEmail = localStorage.getItem('userEmail') || username;
-
-        if (userId) {
-          onSuccess?.({ userId, username, email: userEmail, provider });
-        } else {
-          const msg = 'Login did not complete. Please try again or sign up.';
-          setErrorMsg(msg);
-          onFailure?.(msg);
-        }
+    try {
+      if (!FACEBOOK_APP_ID) {
+        throw new Error('Facebook login is not configured.');
       }
-    }, 800);
+
+      const FB = await loadFacebookSdk(FACEBOOK_APP_ID);
+
+      await new Promise((resolve, reject) => {
+        FB.login((response) => {
+          if (response?.authResponse) {
+            resolve(response.authResponse);
+          } else {
+            reject(new Error('Facebook login was cancelled or failed.'));
+          }
+        }, { scope: 'public_profile,email' });
+      });
+
+      const profile = await new Promise((resolve, reject) => {
+        FB.api('/me', 'GET', { fields: 'id,name,email' }, (response) => {
+          if (!response || response.error) {
+            reject(new Error(response?.error?.message || 'Failed to fetch Facebook profile.'));
+          } else {
+            resolve(response);
+          }
+        });
+      });
+
+      if (!profile.email) {
+        throw new Error('We need access to your email to sign you in. Please allow the email permission and try again.');
+      }
+
+      const result = await authApi.socialLogin('facebook', profile.id, profile.email, profile.name || profile.email);
+      const resolvedUsername = result?.username || result?.email || profile.email;
+
+      localStorage.setItem('username', resolvedUsername);
+      onSuccess?.({
+        userId: result?.userId,
+        username: resolvedUsername,
+        email: result?.email || profile.email,
+        provider: 'facebook',
+      });
+    } catch (error) {
+      const msg = error?.message || 'Facebook login failed. Please try again.';
+      setErrorMsg(msg);
+      onFailure?.(msg);
+    } finally {
+      setIsLoading(null);
+    }
   };
 
   const handleBackdropClick = (e) => {
@@ -308,7 +323,7 @@ function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
           <button
             type="button"
             className="lm-btn lm-btn--facebook"
-            onClick={() => handleSocialLogin('facebook')}
+            onClick={() => handleFacebookLogin()}
             disabled={!!isLoading}
             aria-busy={isLoading === 'facebook'}
           >
