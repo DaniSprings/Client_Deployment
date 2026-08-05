@@ -27,14 +27,22 @@ const authAxios = axios.create({
   timeout: 30000,
 });
 
+// Endpoints whose own 401 response means "wrong credentials", not "session
+// expired" — a redirect here would kick the user off the login form instead
+// of showing them the error.
+const CREDENTIAL_ENDPOINTS = ["/login", "/signup", "/register", "/social-login"];
+
 // Response interceptor for auth errors
 authAxios.interceptors.response.use(
   (response) => response,
   (error) => {
-    const { response } = error;
+    const { response, config } = error;
+    const isCredentialAttempt = CREDENTIAL_ENDPOINTS.some((path) =>
+      config?.url?.includes(path),
+    );
 
-    // Handle 401 Unauthorized
-    if (response?.status === 401) {
+    // Handle 401 Unauthorized on authenticated requests (session expired)
+    if (response?.status === 401 && !isCredentialAttempt) {
       localStorage.removeItem("authToken");
       localStorage.removeItem("userId");
       window.location.href = "/login";
