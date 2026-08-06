@@ -479,7 +479,7 @@ function CarStats() {
 
                                 <div className="detail-section">
                                     <h4>Engine Specifications</h4>
-                                    <p><strong>Type:</strong> {details.engine || 'N/A'}</p>
+                                    <p><strong>Type:</strong> {formatDetailValue(details.engine, 'L')}</p>
                                     <p><strong>Cylinders:</strong> {details.cylinders || 'N/A'}</p>
                                     <p><strong>Power:</strong> {formatDetailValue(details.power, ' kW')}</p>
                                     <p><strong>Torque:</strong> {formatDetailValue(details.torque, ' Nm')}</p>
@@ -495,6 +495,7 @@ function CarStats() {
                                     <h4>Fuel Economy</h4>
                                     <p><strong>Consumption:</strong> {formatDetailValue(details.fuelConsumption, ' L/100km')}</p>
                                     <p><strong>Range:</strong> {formatDetailValue(details.fuelRange, ' Km')}</p>
+                                    <p><strong>Tank Size:</strong> {formatDetailValue(details.tankSize, ' L')}</p>
                                 </div>
 
                                 {(details.length || details.widthExclMirrors || details.widthInclMirrors || details.height || details.wheelbase || details.groundClearance) && (
