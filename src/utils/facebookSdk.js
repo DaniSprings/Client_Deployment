@@ -15,6 +15,32 @@ export function loadFacebookSdk(appId) {
   }
 
   sdkPromise = new Promise((resolve, reject) => {
+    // Check if script is already in DOM BEFORE setting fbAsyncInit
+    const existingScript = document.getElementById('facebook-jssdk');
+    if (existingScript) {
+      // Script exists, just set up the async init and wait for it
+      window.fbAsyncInit = function fbAsyncInit() {
+        window.FB.init({
+          appId,
+          cookie: true,
+          xfbml: false,
+          version: 'v21.0',
+        });
+        resolve(window.FB);
+      };
+      // If FB is already loaded, initialize immediately
+      if (window.FB) {
+        window.FB.init({
+          appId,
+          cookie: true,
+          xfbml: false,
+          version: 'v21.0',
+        });
+        resolve(window.FB);
+      }
+      return;
+    }
+
     window.fbAsyncInit = function fbAsyncInit() {
       window.FB.init({
         appId,
@@ -24,10 +50,6 @@ export function loadFacebookSdk(appId) {
       });
       resolve(window.FB);
     };
-
-    if (document.getElementById('facebook-jssdk')) {
-      return;
-    }
 
     const script = document.createElement('script');
     script.id = 'facebook-jssdk';

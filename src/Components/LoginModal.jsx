@@ -7,6 +7,10 @@ import './LoginModal.css';
 
 const FACEBOOK_APP_ID = import.meta.env.VITE_FACEBOOK_APP_ID;
 
+if (!FACEBOOK_APP_ID) {
+  console.warn('WARNING: VITE_FACEBOOK_APP_ID environment variable is not set. Facebook login will be disabled.');
+}
+
 function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
   const LOGIN_EMAIL_KEY = 'rememberedLoginEmail';
   const LOGIN_PASSWORD_KEY = 'rememberedLoginPassword';
@@ -302,7 +306,14 @@ function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
           <button
             type="button"
             className="lm-btn lm-btn--google"
-            onClick={() => handleGoogleLogin()}
+            onClick={() => {
+              try {
+                handleGoogleLogin();
+              } catch (err) {
+                console.error('Error triggering Google login:', err);
+                setErrorMsg('Failed to initiate Google login. Please try again.');
+              }
+            }}
             disabled={!!isLoading}
             aria-busy={isLoading === 'google'}
           >
@@ -323,7 +334,14 @@ function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
           <button
             type="button"
             className="lm-btn lm-btn--facebook"
-            onClick={() => handleFacebookLogin()}
+            onClick={() => {
+              try {
+                handleFacebookLogin();
+              } catch (err) {
+                console.error('Error triggering Facebook login:', err);
+                setErrorMsg('Failed to initiate Facebook login. Please try again.');
+              }
+            }}
             disabled={!!isLoading}
             aria-busy={isLoading === 'facebook'}
           >
