@@ -2,15 +2,10 @@ import axios from "axios";
 
 const normalizeApiBase = (value, fallback) => {
   const raw = (value || fallback || "").trim();
-
-  if (!raw) {
-    return fallback;
-  }
-
+  if (!raw) return fallback;
   const withProtocol = /^https?:\/\//i.test(raw)
     ? raw
     : `https://${raw.replace(/^\/+/, "")}`;
-
   return withProtocol.replace(/\/$/, "");
 };
 
@@ -19,41 +14,18 @@ export const API_BASE = normalizeApiBase(
   "https://clientapi-production-afc7.up.railway.app",
 );
 
-const FALLBACK_API_BASE = "http://localhost4000 "; // Fallback to local development server if primary API is unreachable
-const isFallbackEnabled = API_BASE !== FALLBACK_API_BASE;
-
-const isPrimaryUnreachable = (error) => {
-  if (!error) {
-    return false;
-  }
-
-  // Axios network failures usually have no HTTP response.
-  if (error.response) {
-    return false;
-  }
-
-  const networkCodes = [
-    "ERR_NETWORK",
-    "ECONNREFUSED",
-    "ENOTFOUND",
-    "ETIMEDOUT",
-    "ECONNABORTED",
-  ];
-
-  return (
-    networkCodes.includes(error.code) ||
-    /network|failed to fetch|timeout|refused/i.test(error.message || "")
-  );
-};
+// ─── Removed: localhost fallback that was retrying failed production
+// requests against http://localhost4000 (invalid URL, wrong in production)
 
 // Cache configuration
 const cache = new Map();
-let CACHE_DURATION = 5 * 60 * 1000; // 5 minutes default
+let CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
-// Request tracking for retry logic
+// Retry config — only retries on transient server errors, never on network
+// failures that would previously trigger the localhost fallback
 const requestRetryConfig = {
   maxRetries: 3,
-  retryDelay: 1000, // 1 second
+  retryDelay: 1000,
   retryableStatusCodes: [408, 429, 500, 502, 503, 504],
 };
 
@@ -64,7 +36,7 @@ const api = axios.create({
   timeout: 30000,
 });
 
-// Request interceptor - Add auth token and logging
+// Request interceptor — add auth token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("authToken");
@@ -80,33 +52,16 @@ api.interceptors.request.use(
   },
 );
 
-// Response interceptor - Handle errors and logging
+// Response interceptor — handle errors, NO localhost fallback
 api.interceptors.response.use(
   (response) => {
     console.log(`[API Response] ${response.status} ${response.config.url}`);
     return response;
   },
-  async (error) => {
+  (error) => {
     const { config, response } = error;
 
-    if (
-      isFallbackEnabled &&
-      config &&
-      !config.__fallbackAttempted &&
-      isPrimaryUnreachable(error)
-    ) {
-      console.warn(
-        `[API Fallback] Primary API unreachable (${API_BASE}). Retrying ${config.method?.toUpperCase()} ${config.url} via ${FALLBACK_API_BASE}`,
-      );
-
-      return api.request({
-        ...config,
-        baseURL: FALLBACK_API_BASE,
-        __fallbackAttempted: true,
-      });
-    }
-
-    // Handle 401 Unauthorized - Clear auth and redirect
+    // Handle 401 — clear auth and redirect to login
     if (response?.status === 401 && !config?.suppressAuthRedirect) {
       localStorage.removeItem("authToken");
       localStorage.removeItem("userId");
@@ -121,7 +76,6 @@ api.interceptors.response.use(
       serverErrorMessage,
     );
 
-    // Return structured error response
     return Promise.reject({
       status: response?.status,
       message: serverErrorMessage,
@@ -131,7 +85,7 @@ api.interceptors.response.use(
   },
 );
 
-// Utility function to get cached data
+// Cache helpers
 const getCachedData = (key) => {
   const item = cache.get(key);
   if (item && Date.now() - item.timestamp < CACHE_DURATION) {
@@ -142,15 +96,11 @@ const getCachedData = (key) => {
   return null;
 };
 
-// Utility function to set cached data
 const setCachedData = (key, data) => {
-  cache.set(key, {
-    data,
-    timestamp: Date.now(),
-  });
+  cache.set(key, { data, timestamp: Date.now() });
 };
 
-// Retry logic for failed requests
+// Retry logic — server errors only, not network failures
 const withRetry = async (requestFn, retries = 0) => {
   try {
     return await requestFn();
@@ -160,10 +110,8 @@ const withRetry = async (requestFn, retries = 0) => {
       requestRetryConfig.retryableStatusCodes.includes(error.status);
 
     if (shouldRetry) {
-      const delay = requestRetryConfig.retryDelay * Math.pow(2, retries); // Exponential backoff
-      console.log(
-        `[Retry] Attempt ${retries + 1}/${requestRetryConfig.maxRetries} after ${delay}ms`,
-      );
+      const delay = requestRetryConfig.retryDelay * Math.pow(2, retries);
+      console.log(`[Retry] Attempt ${retries + 1}/${requestRetryConfig.maxRetries} after ${delay}ms`);
       await new Promise((resolve) => setTimeout(resolve, delay));
       return withRetry(requestFn, retries + 1);
     }
@@ -172,23 +120,19 @@ const withRetry = async (requestFn, retries = 0) => {
   }
 };
 
-// HTTP methods with caching support
+// HTTP methods
 export const get = (url, config = {}) => {
   const cacheKey = `GET_${url}`;
   const shouldUseCache = config.cache !== false;
 
   if (shouldUseCache) {
     const cached = getCachedData(cacheKey);
-    if (cached) {
-      return Promise.resolve({ data: cached });
-    }
+    if (cached) return Promise.resolve({ data: cached });
   }
 
   return withRetry(() =>
     api.get(url, config).then((response) => {
-      if (shouldUseCache) {
-        setCachedData(cacheKey, response.data);
-      }
+      if (shouldUseCache) setCachedData(cacheKey, response.data);
       return response;
     }),
   );
@@ -202,21 +146,17 @@ export const post = (url, data, config = {}) => {
   return withRetry(() => api.post(url, data, config));
 };
 
-export const put = (url, data, config = {}) => {
-  return withRetry(() => api.put(url, data, config));
-};
+export const put = (url, data, config = {}) =>
+  withRetry(() => api.put(url, data, config));
 
-export const del = (url, config = {}) => {
-  return withRetry(() => api.delete(url, config));
-};
+export const del = (url, config = {}) =>
+  withRetry(() => api.delete(url, config));
 
-// Utility: Clear cache
+// Utilities
 export const clearCache = (pattern = null) => {
   if (pattern) {
     Array.from(cache.keys()).forEach((key) => {
-      if (key.includes(pattern)) {
-        cache.delete(key);
-      }
+      if (key.includes(pattern)) cache.delete(key);
     });
     console.log(`[Cache] Cleared keys matching: ${pattern}`);
   } else {
@@ -225,12 +165,8 @@ export const clearCache = (pattern = null) => {
   }
 };
 
-// Utility: Set custom cache duration
-export const setCacheDuration = (duration) => {
-  CACHE_DURATION = duration;
-};
+export const setCacheDuration = (duration) => { CACHE_DURATION = duration; };
 
-// Utility: Get API status
 export const getApiStatus = async () => {
   try {
     const response = await api.get("/health");
@@ -240,7 +176,7 @@ export const getApiStatus = async () => {
   }
 };
 
-// Model Table API endpoints
+// ─── Model Table API ──────────────────────────────────────────────────────────
 export const models = {
   getRanges: () => get("/api/models/ranges", { cache: true }),
   getPrices: () => get("/api/models/prices", { cache: true }),
@@ -252,187 +188,71 @@ export const models = {
   searchModelTableBrands: (query) =>
     get(`/api/models/model-table/brands/search?q=${encodeURIComponent(query)}`),
   searchModelTableModels: (brand, query) =>
-    get(
-      `/api/models/model-table/models/search?brand=${encodeURIComponent(brand)}&q=${encodeURIComponent(query)}`,
-    ),
+    get(`/api/models/model-table/models/search?brand=${encodeURIComponent(brand)}&q=${encodeURIComponent(query)}`),
   getModelTableModelsByBrand: (brand) =>
-    get(
-      `/api/models/model-table/models/by-brand?brand=${encodeURIComponent(brand)}`,
-    ),
+    get(`/api/models/model-table/models/by-brand?brand=${encodeURIComponent(brand)}`),
   searchModelTableResults: (brand, model) =>
-    get(
-      `/api/models/model-table/search?brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}`,
-    ),
+    get(`/api/models/model-table/search?brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}`),
   getAllBrands: () => get("/api/models/brands/all", { cache: true }),
-  getBrandsWithCount: () =>
-    get("/api/models/brands/with-count", { cache: true }),
+  getBrandsWithCount: () => get("/api/models/brands/with-count", { cache: true }),
   getModelsByBrand: (brand) =>
-    get(`/api/models/model-table/models/by-brand?brand=${encodeURIComponent(brand)}`, {
-      cache: true,
-    }),
+    get(`/api/models/model-table/models/by-brand?brand=${encodeURIComponent(brand)}`, { cache: true }),
   getYearsByBrandModel: (brand, model) =>
-    get(
-      `/api/models/years/by-brand-model?brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}`,
-      { cache: true },
-    ),
+    get(`/api/models/years/by-brand-model?brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}`, { cache: true }),
   getCarDetails: (brand, model, year) =>
-    get(
-      `/api/models/details?brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}&year=${encodeURIComponent(year)}`,
-    ),
-
-  // CarStats endpoints
+    get(`/api/models/details?brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}&year=${encodeURIComponent(year)}`),
   getCarStats: (brand, model) =>
-    get(
-      `/api/models/carstats/${encodeURIComponent(brand)}/${encodeURIComponent(model)}`,
-    ),
-
+    get(`/api/models/carstats/${encodeURIComponent(brand)}/${encodeURIComponent(model)}`),
   getCarStatsByYear: (brand, model, year) =>
-    get(
-      `/api/models/carstats/${encodeURIComponent(brand)}/${encodeURIComponent(model)}/${encodeURIComponent(year)}`,
-    ),
-
-  getCarStatsBatch: (carRequests) =>
-    post("/api/models/carstats/batch", carRequests),
-
+    get(`/api/models/carstats/${encodeURIComponent(brand)}/${encodeURIComponent(model)}/${encodeURIComponent(year)}`),
+  getCarStatsBatch: (carRequests) => post("/api/models/carstats/batch", carRequests),
   getVehicleData: (payload) => post("/api/models/vehicle-data", payload),
-
   getDimensionsByBrandModel: (brand, model) =>
-    get(
-      `/api/models/dimensions/${encodeURIComponent(brand)}/${encodeURIComponent(model)}`,
-    ),
-
-  // Parallel async fetch multiple cars data
+    get(`/api/models/dimensions/${encodeURIComponent(brand)}/${encodeURIComponent(model)}`),
   getMultipleCarsData: async (carsArray) => {
-    try {
-      const promises = carsArray.map((car) =>
-        models
-          .getCarDetails(car.brand, car.model, car.year)
-          .catch((err) => ({ error: true, message: err.message, car })),
-      );
-      const results = await Promise.all(promises);
-      return results;
-    } catch (error) {
-      console.error("[Models] Error in parallel fetch:", error);
-      throw error;
-    }
+    const promises = carsArray.map((car) =>
+      models.getCarDetails(car.brand, car.model, car.year)
+        .catch((err) => ({ error: true, message: err.message, car })),
+    );
+    return Promise.all(promises);
   },
-
-  // Parallel fetch specific data types for multiple cars
   getMultipleCarsParallel: async (carsArray) => {
-    try {
-      const allPromises = carsArray.map((car) => ({
-        carId: car.id,
-        brand: car.brand,
-        model: car.model,
-        year: car.year,
-        dataPromises: Promise.all([
-          get(
-            `/api/models/price?brand=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}&year=${encodeURIComponent(car.year)}`,
-          ).catch((err) => ({
-            error: true,
-            type: "price",
-            message: err.message,
-          })),
-          get(
-            `/api/models/engine?brand=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}&year=${encodeURIComponent(car.year)}`,
-          ).catch((err) => ({
-            error: true,
-            type: "engine",
-            message: err.message,
-          })),
-          get(
-            `/api/models/performance?brand=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}&year=${encodeURIComponent(car.year)}`,
-          ).catch((err) => ({
-            error: true,
-            type: "performance",
-            message: err.message,
-          })),
-          get(
-            `/api/models/range?brand=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}&year=${encodeURIComponent(car.year)}`,
-          ).catch((err) => ({
-            error: true,
-            type: "range",
-            message: err.message,
-          })),
-        ]),
-      }));
-
-      const results = await Promise.all(
-        allPromises.map(async (item) => {
-          const [price, engine, performance, range] = await item.dataPromises;
-          return {
-            carId: item.carId,
-            brand: item.brand,
-            model: item.model,
-            year: item.year,
-            data: { price, engine, performance, range },
-          };
-        }),
-      );
-
-      return results;
-    } catch (error) {
-      console.error("[Models] Error in parallel fetch:", error);
-      throw error;
-    }
+    const allPromises = carsArray.map((car) => ({
+      carId: car.id, brand: car.brand, model: car.model, year: car.year,
+      dataPromises: Promise.all([
+        get(`/api/models/price?brand=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}&year=${encodeURIComponent(car.year)}`).catch((e) => ({ error: true, type: "price", message: e.message })),
+        get(`/api/models/engine?brand=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}&year=${encodeURIComponent(car.year)}`).catch((e) => ({ error: true, type: "engine", message: e.message })),
+        get(`/api/models/performance?brand=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}&year=${encodeURIComponent(car.year)}`).catch((e) => ({ error: true, type: "performance", message: e.message })),
+        get(`/api/models/range?brand=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}&year=${encodeURIComponent(car.year)}`).catch((e) => ({ error: true, type: "range", message: e.message })),
+      ]),
+    }));
+    return Promise.all(allPromises.map(async (item) => {
+      const [price, engine, performance, range] = await item.dataPromises;
+      return { carId: item.carId, brand: item.brand, model: item.model, year: item.year, data: { price, engine, performance, range } };
+    }));
   },
-
-  // Clear model-related cache
-  invalidateCache: () => {
-    clearCache("models");
-    clearCache("brands");
-    clearCache("carstats");
-  },
+  invalidateCache: () => { clearCache("models"); clearCache("brands"); clearCache("carstats"); },
 };
 
-// JSON-based Car Data API endpoints (using All_CarBrands_Completed.json)
+// ─── Cars API ─────────────────────────────────────────────────────────────────
 export const cars = {
   getAllBrands: () => get("/api/cars/brands", { cache: true }),
-  searchBrands: (query) =>
-    get(`/api/cars/brands/search?q=${encodeURIComponent(query)}`),
-  autoCorrectBrand: (query) =>
-    get(`/api/cars/brands/autocorrect?q=${encodeURIComponent(query)}`),
-  getModelsByBrand: (brand) =>
-    get(`/api/cars/models?brand=${encodeURIComponent(brand)}`, { cache: true }),
-  searchModels: (query, brand) =>
-    get(
-      `/api/cars/models/search?q=${encodeURIComponent(query)}&brand=${encodeURIComponent(brand)}`,
-    ),
-  autoCorrectModel: (query, brand) =>
-    get(
-      `/api/cars/models/autocorrect?q=${encodeURIComponent(query)}&brand=${encodeURIComponent(brand)}`,
-    ),
-  getYearsByBrandModel: (brand, model) =>
-    get(
-      `/api/cars/years?brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}`,
-      { cache: true },
-    ),
+  searchBrands: (query) => get(`/api/cars/brands/search?q=${encodeURIComponent(query)}`),
+  autoCorrectBrand: (query) => get(`/api/cars/brands/autocorrect?q=${encodeURIComponent(query)}`),
+  getModelsByBrand: (brand) => get(`/api/cars/models?brand=${encodeURIComponent(brand)}`, { cache: true }),
+  searchModels: (query, brand) => get(`/api/cars/models/search?q=${encodeURIComponent(query)}&brand=${encodeURIComponent(brand)}`),
+  autoCorrectModel: (query, brand) => get(`/api/cars/models/autocorrect?q=${encodeURIComponent(query)}&brand=${encodeURIComponent(brand)}`),
+  getYearsByBrandModel: (brand, model) => get(`/api/cars/years?brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}`, { cache: true }),
   getCarDetails: (brand, model, year = null) => {
     let url = `/api/cars/details?brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}`;
-    if (year) {
-      url += `&year=${encodeURIComponent(year)}`;
-    }
+    if (year) url += `&year=${encodeURIComponent(year)}`;
     return get(url);
   },
-  getAllCarsByBrandModel: (brand, model) =>
-    get(
-      `/api/cars/all?brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}`,
-    ),
-  getAcquiredData: (limit = 100) =>
-    get(`/api/cars/acquired?limit=${encodeURIComponent(limit)}`),
-  getSupabaseTableData: (tableName, limit = 100) =>
-    get(
-      `/api/cars/supabase/table/${encodeURIComponent(tableName)}?limit=${encodeURIComponent(limit)}`,
-    ),
-
-  // Clear car-related cache
-  invalidateCache: () => {
-    clearCache("cars");
-    clearCache("brands");
-  },
+  getAllCarsByBrandModel: (brand, model) => get(`/api/cars/all?brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}`),
+  invalidateCache: () => { clearCache("cars"); clearCache("brands"); },
 };
 
-// Auth and User endpoints
+// ─── Auth API ─────────────────────────────────────────────────────────────────
 export const auth = {
   register: (email, username, fullName, extra) =>
     post("/api/login/register", {
@@ -446,29 +266,13 @@ export const auth = {
   socialLogin: (provider, providerId, email, fullName) =>
     post("/api/auth/social-login", { provider, providerId, email, fullName }),
   trackSearch: (userId, searchTerm, filter) =>
-    post(
-      "/api/auth/search",
-      { userId, searchTerm, filter },
-      { skipRetry: true, suppressAuthRedirect: true },
-    ),
+    post("/api/auth/search", { userId, searchTerm, filter }, { skipRetry: true, suppressAuthRedirect: true }),
   getUserSearches: (userId) => get(`/api/auth/user/${userId}/searches`),
-
-  // Send compared car details to the signed-in user's email address.
-  sendComparisonEmail: (cars) =>
-    post("/api/auth/send-comparison-email", { cars }),
-
-  // Get current user profile
+  sendComparisonEmail: (cars) => post("/api/auth/send-comparison-email", { cars }),
   getCurrentUser: () => get("/api/auth/me", { cache: false }),
-
-  // Update user profile
-  updateProfile: (userId, profileData) =>
-    put(`/api/auth/user/${userId}`, profileData),
-
-  // Change password
+  updateProfile: (userId, profileData) => put(`/api/auth/user/${userId}`, profileData),
   changePassword: (userId, oldPassword, newPassword) =>
     post("/api/auth/change-password", { userId, oldPassword, newPassword }),
-
-  // Logout
   logout: () => {
     clearCache();
     localStorage.removeItem("authToken");
@@ -476,4 +280,5 @@ export const auth = {
     return post("/api/auth/logout", {});
   },
 };
+
 export default api;
