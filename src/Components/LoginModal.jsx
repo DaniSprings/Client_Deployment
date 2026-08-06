@@ -2,14 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useGoogleLogin } from '@react-oauth/google';
 import authApi from '../services/authApi.js';
-import { loadFacebookSdk } from '../utils/facebookSdk.js';
+// FACEBOOK LOGIN TEMPORARILY DISABLED - import removed
+// import { loadFacebookSdk } from '../utils/facebookSdk.js';
 import './LoginModal.css';
 
-const FACEBOOK_APP_ID = import.meta.env.VITE_FACEBOOK_APP_ID;
-
-if (!FACEBOOK_APP_ID) {
-  console.warn('WARNING: VITE_FACEBOOK_APP_ID environment variable is not set. Facebook login will be disabled.');
-}
+// FACEBOOK LOGIN TEMPORARILY DISABLED
+// const FACEBOOK_APP_ID = import.meta.env.VITE_FACEBOOK_APP_ID;
 
 function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
   const LOGIN_EMAIL_KEY = 'rememberedLoginEmail';
@@ -84,8 +82,9 @@ function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
     },
   });
 
-  // Real Facebook Login: JS SDK login popup → FB Graph /me → existing
-  // /api/auth/social-login endpoint (mirrors the Google implicit-flow pattern).
+  // FACEBOOK LOGIN TEMPORARILY DISABLED
+  // TODO: Re-enable when Facebook SDK issues are resolved
+  /* 
   const handleFacebookLogin = async () => {
     setErrorMsg('');
     setIsLoading('facebook');
@@ -139,6 +138,7 @@ function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
       setIsLoading(null);
     }
   };
+  */
 
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) onClose();
@@ -330,7 +330,8 @@ function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
             <span>{isLoading === 'google' ? 'Connecting…' : 'Continue with Google'}</span>
           </button>
 
-          {/* Facebook */}
+          {/* FACEBOOK LOGIN TEMPORARILY DISABLED */}
+          {/* 
           <button
             type="button"
             className="lm-btn lm-btn--facebook"
@@ -354,6 +355,7 @@ function LoginModal({ onClose, onSuccess, onFailure, onSignupClick }) {
             )}
             <span>{isLoading === 'facebook' ? 'Connecting…' : 'Continue with Facebook'}</span>
           </button>
+          */}
         </div>
 
         {/* Divider */}
