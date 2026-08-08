@@ -465,7 +465,7 @@ a.nav-link {
   .nav-list .dropdown-toggle {
     width: 100%;
     text-align: center;
-    justify-content: center;
+    justify-content: flex-start;
     padding: 10px 16px;
     margin: 0;
     background: transparent;
@@ -517,7 +517,7 @@ a.nav-link {
   /* ── Login button full-width on mobile ── */
   .LoginModal {
     width: 100%;
-    justify-content: center;
+    justify-content: flex-start;
     padding: 10px 16px;
     box-sizing: border-box;
   }
