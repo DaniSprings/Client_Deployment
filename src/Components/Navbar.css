@@ -95,6 +95,7 @@ a.nav-link {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  margin: 0 clamp(12px, 1.8vw, 30px);
 }
 
 .LoginModal:hover {
