@@ -462,7 +462,7 @@ a.nav-link {
     box-sizing: border-box;
   }
 
-  .nav-list .dropdown-toggle {
+  .nav-items .nav-list .dropdown-toggle {
     width: 100%;
     text-align: left;
     justify-content: flex-start;
@@ -515,7 +515,7 @@ a.nav-link {
   }
 
   /* ── Login button full-width on mobile ── */
-  .LoginModal {
+  .nav-items .LoginModal {
     width: 100%;
     justify-content: flex-start;
     padding: 10px 16px;
