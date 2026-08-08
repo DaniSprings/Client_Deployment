@@ -270,7 +270,7 @@ a.nav-link {
 
 /* Reset browser default button appearance for all navbar buttons */
 .navbar button,
-.nav-link.dropdown-toggle {
+.nav-link .dropdown-toggle {
   background: transparent;
   border: none;
   outline: none;
