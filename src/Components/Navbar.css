@@ -438,7 +438,7 @@ a.nav-link {
     display: block;
     padding: 10px 16px;
     width: 100%;
-    text-align: left;
+    text-align: flex-start;
     font-size: 1.2rem;
     box-sizing: border-box;
   }
