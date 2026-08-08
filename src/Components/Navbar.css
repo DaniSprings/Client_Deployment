@@ -532,4 +532,11 @@ a.nav-link {
         align-items: flex-start;
         justify-content: flex-start;
     }
+    .LoginModal{
+        overflow-x: hidden;
+        margin-top: 8px;
+        padding: 10px;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
   }
