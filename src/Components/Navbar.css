@@ -438,7 +438,7 @@ a.nav-link {
     display: block;
     padding: 10px 16px;
     width: 100%;
-    text-align: center;
+    text-align: left;
     font-size: 1.2rem;
     box-sizing: border-box;
   }
@@ -485,7 +485,7 @@ a.nav-link {
     list-style: none;
     width: 100%;
     max-width: 100%;
-    text-align: center;
+    text-align: left;
     margin: 0;
     background: #AB3636;
     padding: 4px 0;
@@ -522,3 +522,13 @@ a.nav-link {
     box-sizing: border-box;
   }
 }
+
+@media (max-width: 480px) {
+      .nav-items {
+        overflow-x: hidden;
+        margin-top: 8px;
+        padding: 10px;
+        align-items: left;
+        justify-content: left;
+    }
+  }
