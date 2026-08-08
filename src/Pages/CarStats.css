@@ -628,7 +628,7 @@
 @media (max-width: 480px) {
     .search-button{
         overflow-x: hidden;
-        margin-top: 6px;
+        margin-top: 8px;
         padding: 10px;
         align-items: center;
         justify-content: center;
