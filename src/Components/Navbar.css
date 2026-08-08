@@ -186,7 +186,6 @@ a.nav-link {
   min-width: 160px;
   z-index: 1000;
   white-space: nowrap;
-  margin: 0 clamp(12px, 1.8vw, 30px);
 }
 
 .dropdown-menu li {
@@ -540,5 +539,16 @@ a.nav-link {
         padding: 10px;
         align-items: flex-start;
         justify-content: flex-start;
+    }
+    .nav-link.dropdown-toggle {
+      background: transparent;
+      border: none;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      cursor: pointer;
+      color: white;
+      padding: 0;
+      margin: 0 clamp(12px, 1.8vw, 30px);
     }
   }
