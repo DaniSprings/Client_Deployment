@@ -438,7 +438,7 @@ a.nav-link {
     display: block;
     padding: 10px 16px;
     width: 100%;
-    text-align: flex-start;
+    text-align: left;
     font-size: 1.2rem;
     box-sizing: border-box;
   }
@@ -458,13 +458,13 @@ a.nav-link {
     width: 100%;
     position: relative;
     margin: 0;
-    text-align: center;
+    text-align: left;
     box-sizing: border-box;
   }
 
   .nav-list .dropdown-toggle {
     width: 100%;
-    text-align: center;
+    text-align: left;
     justify-content: flex-start;
     padding: 10px 16px;
     margin: 0;
@@ -498,7 +498,7 @@ a.nav-link {
   .dropdown-menu li {
     padding: 0;
     margin: 0;
-    text-align: center;
+    text-align: left;
     width: 100%;
   }
 
@@ -508,7 +508,7 @@ a.nav-link {
     font-size: 1.2rem;
     color: white;
     text-decoration: none;
-    text-align: center;
+    text-align: left;
     white-space: normal;
     width: 100%;
     box-sizing: border-box;
@@ -528,7 +528,7 @@ a.nav-link {
         overflow-x: hidden;
         margin-top: 8px;
         padding: 10px;
-        align-items: left;
+        align-items: flex-start;
         justify-content: flex-start;
     }
   }
