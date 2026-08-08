@@ -70,6 +70,7 @@ a.nav-link,
   font-style: normal;
   text-transform: uppercase;
   letter-spacing: 0.03em;
+  text-align: left;
 }
 
 a.nav-link {
