@@ -570,7 +570,7 @@ function CarStats() {
                                         )}
 
                                         <div className="detail-section">
-                                            <h4>Additional Performance</h4>
+                                            <h4>Additional Economy</h4>
                                             <p><strong>Steering:</strong> {formatDetailValue(details.steering)}</p>
                                             <p><strong>Driven Wheels:</strong> {formatDetailValue(details.drivenWheels)}</p>
                                             <p><strong>Gear Ratios:</strong> {formatDetailValue(details.gearRatios)}</p>
