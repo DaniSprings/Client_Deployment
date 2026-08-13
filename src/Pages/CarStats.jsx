@@ -10,6 +10,7 @@ import {
     searchCatalogBrands,
     searchCatalogModels
 } from '../utils/brandModelCatalog.js';
+import { supabaseVehicleService } from '../services/SupabaseVehicleService.js';
 import {
     getLookupModelOptions,
     normalizeLookupValue,
@@ -142,17 +143,33 @@ function CarStats() {
         });
     };
 
-    const loadModelsForBrand = async (id, brand) => {
-        const fallbackModels = getBrandModels(brand);
+         const loadModelsForBrand = async (id, brand) => {
+
+         const fallbackModels = getBrandModels(brand);
+
         try {
-            const response = await models.getModelsByBrand(brand);
-            const liveModels = Array.isArray(response.data) ? response.data : [];
-            setModelsList(prev => ({ ...prev, [id]: getLookupModelOptions(brand, liveModels.length > 0 ? liveModels : fallbackModels) }));
+            const supabaseModels = await supabaseVehicleService.getModelsByBrand(brand);
+
+            const normalizedModels = (Array.isArray(supabaseModels) ? supabaseModels : [])
+                .map((item) => {
+                    if (typeof item === 'string') return item;
+                    return item?.ModelNames ?? item?.model_name ?? item?.modelName ?? '';
+                })
+                .filter(Boolean);
+
+            const mergedModels = getLookupModelOptions(
+                brand,
+                normalizedModels.length > 0 ? normalizedModels : fallbackModels
+            );
+
+            setModelsList(prev => ({ ...prev, [id]: mergedModels }));
+            setFilteredBrands(prev => ({ ...prev, [`model-${id}`]: mergedModels }));
         } catch (error) {
-            console.error(`Error fetching models for brand ${brand}:`, error);
+            console.error(`Error fetching Supabase models for brand ${brand}:`, error);
             setModelsList(prev => ({ ...prev, [id]: getLookupModelOptions(brand, fallbackModels) }));
+            setFilteredBrands(prev => ({ ...prev, [`model-${id}`]: fallbackModels }));
         }
-    };
+     };
 
     const fetchVehicleRecord = async (brand, model) => {
         const response = await models.getVehicleData({ brand, model, limit: 1 });
@@ -292,8 +309,15 @@ function CarStats() {
     };
 
     const handleModelSelect = (id, model) => {
+        const selectedModel =
+            typeof model === 'string'
+                ? model
+                : model?.ModelNames ?? model?.model_name ?? model?.modelName ?? ''; 
+        clearCarLookupState(id);
+        if (!selectedModel) return;
+        
         setComparisonRequested(false);
-        setCarStatsList(prev => prev.map(car => car.id === id ? { ...car, model: model } : car));
+        setCarStatsList(prev => prev.map(car => car.id === id ? { ...car, model: selectedModel } : car));
         setShowSuggestions(prev => ({ ...prev, [`model-${id}`]: false }));
         clearCarLookupState(id);
     };
@@ -358,6 +382,7 @@ function CarStats() {
                                     else if (field.onChange === 'handleModelChange') handleModelChange(car.id, value);
                                     else if (field.onChange === 'handleBrandSelect') handleBrandSelect(car.id, value);
                                     else if (field.onChange === 'handleModelSelect') handleModelSelect(car.id, value);
+                                    else if (field.onChange === 'handleSelectModel') handleModelSelect(car.id, value);
                                 };
 
                                 const handleFieldBlur = () => {
