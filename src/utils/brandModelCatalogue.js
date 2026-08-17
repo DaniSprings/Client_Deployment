@@ -3,6 +3,8 @@ import modelNameRows from "../../JSON/ModelNames.json";
 const brandAliases = {
   cherry: "chery",
   "mercedes benz amg": "mercedes amg",
+  "defender 110 d350 trophy edition" : "defender 110 d350 trophy",
+  "defender 110 d300 xtech edition" : "defender 110 d300 xtech",
 };
 
 const familyStopWords = new Set([
