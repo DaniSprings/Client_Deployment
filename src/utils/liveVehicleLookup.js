@@ -3,7 +3,7 @@ import {
   getBrandModels,
   getCatalogBrands,
   getModelAutoCorrect,
-} from "./brandModelCatalog.js";
+} from "./brandModelCatalogue.js";
 
 export const normalizeLookupValue = (value = "") =>
   value.trim().replace(/\s+/g, " ").toLowerCase();

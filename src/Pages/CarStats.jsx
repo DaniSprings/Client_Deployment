@@ -9,7 +9,7 @@ import {
     getModelAutoCorrect,
     searchCatalogBrands,
     searchCatalogModels
-} from '../utils/brandModelCatalog.js';
+} from '../utils/brandModelCatalogue.js';
 import { supabaseVehicleService } from '../services/SupabaseVehicleService.js';
 import {
     getLookupModelOptions,
