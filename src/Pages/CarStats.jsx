@@ -17,6 +17,7 @@ import {
     rankOptionSuggestions,
     resolveVehicleDetailsForSelection
 } from '../utils/liveVehicleLookup.js';
+import AdBanner from '../Components/AdBanner.jsx';
 
 const formatDetailValue = (value, suffix = '') => {
     if (value === null || value === undefined || value === '') {
@@ -652,6 +653,7 @@ function CarStats() {
                     </div>
                 </div>
             )}
+            <AdBanner />
         </div>
     );
 }
