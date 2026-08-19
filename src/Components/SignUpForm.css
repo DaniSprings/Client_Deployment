@@ -168,7 +168,7 @@
     margin: 0;               
     padding: 12px;
     max-height: 100svh;      
-    overflow-y: auto;        
+    /*overflow-y: auto;*/        
     border-radius: 0;        
     box-sizing: border-box;
   }
