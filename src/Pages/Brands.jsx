@@ -1,5 +1,4 @@
 import BrandGrid from '../Components/BrandGrid.jsx';
-import PopUpModal from '../Components/Pop-upModal.jsx';
 import './Brands.css';
 
 //all constant and declared variables have been to moved to the BrandGrid component

@@ -4,7 +4,7 @@ import VehicleSpecsTable from '../Components/VehicleSpecsTable.jsx';
 import PopUpModal from '../Components/Pop-upModal.jsx';
 import './SearchResults.css';
 import { models } from '../services/api.js';
-import { getModelFamilies, searchCatalogBrands } from '../utils/brandModelCatalog.js';
+import { getModelFamilies, searchCatalogBrands } from '../utils/brandModelCatalogue.js';
 import {
     getLookupModelOptions,
     rankOptionSuggestions,

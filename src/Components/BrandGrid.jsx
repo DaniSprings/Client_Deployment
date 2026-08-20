@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PopUpModal from './Pop-upModal.jsx';
-import { getBrandModelFamilies } from '../utils/brandModelCatalog.js';
+import { getBrandModelFamilies } from '../utils/brandModelCatalogue.js';
 import './BrandGrid.css';
 
 const brands = [
