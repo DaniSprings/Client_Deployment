@@ -422,7 +422,7 @@ function CarStats() {
                                                     required={field.required}
                                                     disabled={isDisabled}
                                                     placeholder={field.placeholder}
-                                                    autoComplete="off"
+                                                    autoComplete="on"
                                                     className={`${field.name}-input`}
                                                 />
                                                 {field.name === 'model' && (
@@ -495,7 +495,7 @@ function CarStats() {
                         {Object.entries(carDetailsData).map(([carId, details]) => (
                             <div key={carId} className="car-detail-card">
                                 <h3>{details.brand} {details.model}</h3>
-                                <h5>{details.bodyShape}</h5>
+                                <h4>{details.bodyShape}</h4>
 
                                 <div className="detail-section">
                                     <h4>Price</h4>
