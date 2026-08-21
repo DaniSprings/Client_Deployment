@@ -504,7 +504,7 @@ function CarStats() {
                                     </p>
                                 </div>
 
-                                <div className="detail-section1">
+                                <div className="detail-section">
                                     <h4>Engine Specifications</h4>
                                     <p><strong>Type:</strong> {formatDetailValue(details.engine, 'L')}</p>
                                     <p><strong>Cylinders:</strong> {details.cylinders || 'N/A'}</p>
@@ -512,13 +512,13 @@ function CarStats() {
                                     <p><strong>Torque:</strong> {formatDetailValue(details.torque, ' Nm')}</p>
                                 </div>
 
-                                <div className="detail-section1">
+                                <div className="detail-section">
                                     <h4>Performance</h4>
                                     <p><strong>Top Speed:</strong> {formatDetailValue(details.topSpeed, ' km/h')}</p>
                                     <p><strong>0-100 kph:</strong> {formatDetailValue(details.acceleration, ' s')}</p>
                                 </div>
 
-                                <div className="detail-section2">
+                                <div className="detail-section">
                                     <h4>Fuel Economy</h4>
                                     <p><strong>Consumption:</strong> {formatDetailValue(details.fuelConsumption, ' L/100km')}</p>
                                     <p><strong>Range:</strong> {formatDetailValue(details.fuelRange, ' Km')}</p>
@@ -526,7 +526,7 @@ function CarStats() {
                                 </div>
 
                                 {(details.length || details.widthExclMirrors || details.widthInclMirrors || details.height || details.wheelbase || details.groundClearance) && (
-                                    <div className="detail-section3">
+                                    <div className="detail-section">
                                         <h4>Dimensions</h4>
                                         <p><strong>Length:</strong> {formatDetailValue(details.length, ' mm')}</p>
                                         <p><strong>Width Excluding Mirrors:</strong> {formatDetailValue(details.widthExclMirrors, ' mm')}</p>
@@ -538,7 +538,7 @@ function CarStats() {
                                 )}
 
                                 {(details.towingBraked || details.towingUnbraked || details.kerbWeight || details.gvm || details.dryWeight) && (
-                                    <div className="detail-section4">
+                                    <div className="detail-section">
                                         <h4>Towing & Mass</h4>
                                         <p><strong>Kerb Weight (EU):</strong> {formatDetailValue(details.kerbWeight, ' kg')}</p>
                                         <p><strong>Dry Weight (DIN):</strong> {formatDetailValue(details.dryWeight, ' kg')}</p>
@@ -555,7 +555,7 @@ function CarStats() {
                                 
 
                                 {(details.airConditioning || details.navigation || details.bluetooth) && (
-                                    <div className="detail-section5">
+                                    <div className="detail-section">
                                         <h4>Features & Extras</h4>
                                         <p><strong>Air Conditioning:</strong> {formatDetailValue(details.airConditioning)}</p>
                                         <p><strong>Navigation:</strong> {formatDetailValue(details.navigation)}</p>
