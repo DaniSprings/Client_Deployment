@@ -109,7 +109,8 @@ const COMPARISON_FIELDS = [
     { key: 'acceleration', preference: 'min' },
     { key: 'fuelConsumption', preference: 'min' },
     { key: 'fuelRange', preference: 'max' },
-    { key: 'widthExclMirrorsInclMirrors', preference: 'min' },
+    { key: 'widthExclMirrors', preference: 'min' },
+    { key: 'widthInclMirrors', preference: 'min'  },
     { key: 'length', preference: 'min' },
 ];
 
@@ -254,20 +255,20 @@ function CarsDataTable({ cars, carDetailsData, carLookupStatus, comparisonReques
         if (!fieldResult) {
             return '';
         }
-        if (fieldResult.best.has(carId)) {
+        else if (fieldResult.best.has(carId)) {
             return 'comparison-best';
         }
-        if (fieldResult.worst.has(carId)) {
+        else if (fieldResult.worst.has(carId)) {
             return 'comparison-worst';
         }
         return '';
     };
 
     const getRowComparisonClass = (carId) => {
-        if (comparisonSummary.overallBest.has(carId)) {
+         if (comparisonSummary.overallBest.has(carId)) {
             return 'comparison-overall-best';
         }
-        if (comparisonSummary.overallWorst.has(carId)) {
+        else if (comparisonSummary.overallWorst.has(carId)) {
             return 'comparison-overall-worst';
         }
         return '';
@@ -277,7 +278,7 @@ function CarsDataTable({ cars, carDetailsData, carLookupStatus, comparisonReques
         if (comparisonSummary.overallBest.has(carId)) {
             return 'Best Overall Value';
         }
-        if (comparisonSummary.overallWorst.has(carId)) {
+        else if (comparisonSummary.overallWorst.has(carId)) {
             return 'Least Desirable Overall';
         }
         return '';
@@ -435,6 +436,7 @@ CarsDataTable.propTypes = {
     carDetailsData: PropTypes.objectOf(PropTypes.shape({
         brand: PropTypes.string,
         model: PropTypes.string,
+        /*modelshape: PropTypes.string,*/
         price: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         engine: PropTypes.string,
         cylinders: PropTypes.string,
