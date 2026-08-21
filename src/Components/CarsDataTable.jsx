@@ -109,8 +109,8 @@ const COMPARISON_FIELDS = [
     { key: 'acceleration', preference: 'min' },
     { key: 'fuelConsumption', preference: 'min' },
     { key: 'fuelRange', preference: 'max' },
-    { key: 'widthExclMirrorsInclMirrors', preference: 'max' },
-    { key: 'length', preference: 'max' },
+    { key: 'widthExclMirrorsInclMirrors', preference: 'min' },
+    { key: 'length', preference: 'min' },
 ];
 
 const toComparableNumber = (value) => {
@@ -142,19 +142,19 @@ const renderStatus = (car, lookupState, hasDetails) => {
         return <span className="status-complete">Loaded</span>;
     }
 
-    if (lookupState?.status === 'loading') {
+    else if (lookupState?.status === 'loading') {
         return <span className="status-ready">Searching...</span>;
     }
 
-    if (lookupState?.status === 'not-found') {
+    else if (lookupState?.status === 'not-found') {
         return <span className="status-incomplete">No match found</span>;
     }
 
-    if (lookupState?.status === 'error') {
+    else if (lookupState?.status === 'error') {
         return <span className="status-incomplete">Lookup failed</span>;
     }
 
-    if (car.brand && car.model) {
+    else if (car.brand && car.model) {
         return <span className="status-ready">Ready</span>;
     }
 
